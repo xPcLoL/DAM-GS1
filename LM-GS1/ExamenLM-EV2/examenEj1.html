@@ -1,0 +1,37 @@
+<html>
+<head>
+    <title>Ejercicio 1</title>
+    <script type="text/javascript" src="jquery-3.7.1.min.js"></script>
+    <script language="JavaScript">
+        $(document).ready(function(){
+            var e = 0;
+            $("#crearcaja").click(function(){
+                e++;
+                var caja = $("<div>").text("Caja número " + e);
+                caja.css({width:"100px",height:"100px",backgroundColor:"blue",border:"solid 1px",textAlign:"center",marginTop:"5px"});
+                $("#contenedor").append(caja);
+            });
+            $("#contenedor").on("mouseover","div",function(){
+                $(this).css("backgroundColor","green");
+            });
+            $("#contenedor").on("click", "div",function(){
+                $(this).hide(2000);
+            });
+            $(document).on("contextmenu",function(event){
+                event.preventDefault();
+                $("#mensaje").text("Click derecho detectado");
+            });
+        });
+    </script>
+    <style type="text/css">
+        #contenedor{
+            border:solid 1px #666;
+        }
+    </style>
+</head>
+<body>
+    <input type="button" id="crearcaja" value="Crear caja">
+    <div id="contenedor"></div>
+    <p id="mensaje"></p>
+</body>
+</html>

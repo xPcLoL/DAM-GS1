@@ -1,0 +1,134 @@
+@import "tailwindcss";
+
+:root {
+  --parchment-light: #fdf5e6;
+  --parchment-mid: #f5deb3;
+  --ocean-blue: #0077be;
+  --ocean-deep: #003366;
+  --navy: #001f3f;
+  --gold: #D4A017;
+  --gold-bright: #FFD700;
+  --red-pirate: #8B0000;
+  --ink: #2b1e16;
+}
+
+body {
+  background-color: #fdf5e6;
+  background-image: 
+    radial-gradient(circle at center, transparent 0%, rgba(43, 30, 22, 0.05) 100%),
+    url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.65' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)' opacity='0.1'/%3E%3C/svg%3E");
+  background-attachment: fixed;
+  color: var(--ink);
+  font-family: 'IM Fell English', serif;
+  -webkit-font-smoothing: antialiased;
+}
+
+/* ─── CURSOR & INTERACTION ─── */
+a, 
+button, 
+[role="button"], 
+input[type="submit"],
+select {
+  cursor: pointer !important;
+}
+
+/* ─── CUSTOM SCROLLBAR ─── */
+.custom-scrollbar::-webkit-scrollbar {
+  width: 8px;
+}
+.custom-scrollbar::-webkit-scrollbar-track {
+  background: rgba(0, 0, 0, 0.05);
+  border-radius: 10px;
+}
+.custom-scrollbar::-webkit-scrollbar-thumb {
+  background: #0077be;
+  border-radius: 10px;
+}
+.custom-scrollbar::-webkit-scrollbar-thumb:hover {
+  background: #003366;
+}
+
+/* ─── Wanted Poster Card (Image Based) ─── */
+.wanted-poster {
+  background-image: url('/wanted-poster.png');
+  background-size: 100% 100%;
+  background-repeat: no-repeat;
+  aspect-ratio: 706 / 1000;
+  border: none !important;
+  background-color: transparent !important;
+  padding: 0 !important;
+  display: flex;
+  flex-direction: column;
+  position: relative;
+  overflow: hidden;
+  transition: all 0.4s ease;
+  box-shadow: 0 15px 35px rgba(0,0,0,0.3);
+}
+
+.wanted-poster:hover {
+  transform: scale(1.05) rotate(1deg);
+  box-shadow: 0 25px 60px rgba(0,0,0,0.5);
+  filter: brightness(1.1);
+}
+
+.poster-portrait {
+  position: absolute;
+  top: 20.8%;
+  left: 7.2%;
+  width: 85.5%;
+  height: 43.5%;
+  overflow: hidden;
+  /* Eliminamos cualquier borde interno para que llene bien el hueco */
+}
+
+.poster-info {
+  position: absolute;
+  bottom: 8%;
+  left: 0;
+  right: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 0 10%;
+  pointer-events: none;
+}
+
+
+.wanted-poster::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.65' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)'/%3E%3C/svg%3E");
+  opacity: 0.03;
+  pointer-events: none;
+}
+
+/* ─── Typography ─── */
+.font-bangers { font-family: 'Bangers', cursive; letter-spacing: 0.08em; }
+.font-cinzel { font-family: 'Cinzel', serif; }
+.font-fell { font-family: 'IM Fell English', serif; }
+
+/* ─── Thematic Elements ─── */
+.rope-divider {
+  height: 12px;
+  background: repeating-linear-gradient(90deg, #0077be 0px, #0077be 8px, #003366 8px, #003366 16px);
+  mask-image: linear-gradient(to right, transparent, black 10%, black 90%, transparent);
+  margin: 2rem 0;
+}
+
+.nav-active {
+  color: var(--ocean-blue) !important;
+  text-shadow: 0 0 15px rgba(0, 119, 190, 0.4);
+}
+
+/* ─── Animations ─── */
+@keyframes fade-in { from { opacity: 0; } to { opacity: 1; } }
+@keyframes slide-up { from { opacity: 0; transform: translateY(30px); } to { opacity: 1; transform: translateY(0); } }
+
+.animate-fade-in { animation: fade-in 1s ease-out forwards; }
+.animate-slide-up { animation: slide-up 0.8s cubic-bezier(0.16, 1, 0.3, 1) forwards; }
+
+.delay-200 { animation-delay: 200ms; }
+.delay-300 { animation-delay: 300ms; }
+.delay-500 { animation-delay: 500ms; }

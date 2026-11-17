@@ -1,0 +1,56 @@
+<html>
+    <head>
+        <title>Ejercicio 1</title>
+        <style type="text/css">
+            .bloque1{
+                color: black;
+                width: 100;
+                background-color: white;
+                border-width: 2;
+                border-color: gray;
+                border-style: groove;
+                width: 100;
+                height: 100;
+            }
+            .bloque2{
+                color: yellow;
+                width: 100;
+                background-color: orange;
+                border-width: 2;
+                border-color: blue;
+                border-style: groove;
+                width: 150;
+                height: 150;
+            }
+        </style>
+        <script language="JavaScript">
+            function cambiar(){
+                if(event.srcElement.className=="bloque1")
+                event.srcElement.className="bloque2"
+            }
+            function cambiar2(){
+                if(event.srcElement.className == "bloque2")
+                event.srcElement.className="bloque1"
+            }
+        </script>
+    </head>
+    <body>
+        <div id="ahtrhr"  class="bloque1" onmouseover="cambiar()" onmouseout="cambiar2()">
+            <font style="font-size: larger;" >Tarjeta1    </font>
+            Contenido de la tarjeta1
+        </div>
+         <div id="ahtrhr"  class="bloque1" onmouseover="cambiar()" onmouseout="cambiar2()">
+            <font style="font-size: larger;" >Tarjeta1    </font>
+            Contenido de la tarjeta2
+        </div>
+         <div id="ahtrhr"  class="bloque1" onmouseover="cambiar()" onmouseout="cambiar2()">
+            <font style="font-size: larger;" >Tarjeta3    </font>
+            Contenido de la tarjeta3
+        </div>
+         <div id="ahtrhr"  class="bloque1" onmouseover="cambiar()" onmouseout="cambiar2()">
+            <font style="font-size: larger;" >Tarjeta4    </font>
+            Contenido de la tarjeta4 
+        </div>
+    </body>
+
+</html>

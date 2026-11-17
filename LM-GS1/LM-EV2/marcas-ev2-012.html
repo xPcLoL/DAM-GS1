@@ -1,0 +1,38 @@
+<html>
+    <head>
+         <title>Transicion. Ejercicio 2</title>
+         <script type="text/javascript" src="jquery-3.7.1.min.js"></script>
+     <script language="JavaScript">
+
+    </script>
+    
+    <style type="text/css">
+        .primero,.segundo{
+            padding:5px;
+            border:1px solid #ccc;
+            background-color: #f1f1f1;
+            position: relative;
+            width: 200px;
+            display: none;
+        }
+        #primero:hover .primero{
+            display: block;
+        }
+        #segundo:hover .segundo{
+            display: block;
+        }
+        
+    </style>
+    </head>                 
+    <body>
+        <ul>
+            <li id="primero">Mostrar el primer DIV oculto
+                <div class="primero">Contenido del primer DIV</div>
+            </li>
+            <li id="segundo">Mostrar el segundo DIV oculto
+                <div class="segundo">Contenido del segundo DIV</div>
+            </li>
+            <!--hover limita su actuacion a los objetos declarados dentro del objeto sobre el que se programa el evento-->
+        </ul>
+    </body>
+</html>

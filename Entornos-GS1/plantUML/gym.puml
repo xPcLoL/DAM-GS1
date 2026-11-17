@@ -1,0 +1,61 @@
+@startuml gym
+title Sistema de reservas de un gimnasio
+
+class Socio {
+  - dni: String
+  - nombre: String
+  - telefono: String
+  - correoElectronico: String
+  - tipoCuota: String
+  + reservarClase(clase: Clase): Reserva
+  + cancelarReserva(reserva: Reserva): void
+  + consultarReservas(): List<Reserva>
+}
+
+class Actividad {
+  - nombre: String
+  - duracion: int
+  - dificultad: String
+  - maxParticipantes: int
+  + crearActividad(): void
+  + modificarActividad(): void
+}
+
+class Clase {
+  - fecha: Date
+  - hora: String
+  - plazasDisponibles: int
+  + comprobarPlazas(): boolean
+  + reservarPlaza(): void
+  + cancelarPlaza(): void
+}
+
+class Sala {
+  - numero: String
+  - capacidadMaxima: int
+  - equipamiento: String
+  + comprobarCapacidad(): int
+}
+
+class Reserva {
+  - fechaReserva: Date
+  - estado: String
+  + confirmar(): void
+  + cancelar(): void
+}
+
+class Cuota {
+  - nombre: String
+  - descripcion: String
+  - accesoTotal: boolean
+  + permiteActividad(actividad: Actividad): boolean
+}
+
+Socio "1" -- "0..*" Reserva : realiza
+Reserva "0..*" -- "1" Clase : corresponde a
+Clase "0..*" -- "1" Actividad : programa
+Clase "0..*" -- "1" Sala : se realiza en
+Socio "0..*" -- "1" Cuota : tiene
+Cuota "1" -- "0..*" Actividad : permite
+
+@enduml

@@ -1,0 +1,23 @@
+<html>
+    <head>
+         <title>Desplazar un fondo usando instrucciones de jquery</title>
+    <script src="jquery-3.7.1.min.js"></script>
+    <script language="JavaScript">
+        $(document).ready(inizializaEventos);
+            function inizializaEventos(){
+                var objetos = $("a"); //variable objetos que es un vector de las etiquetas "a"
+                //alert(objetos.length)
+                objetos.mouseover(entrarMouse) //evento de jquery que se ejecuta sobre la variable objetos 
+            }
+            function entrarMouse(){
+                $(this).css("background-color","#F00"); //$(this) es el objeto sobre el que se ha producido el evento
+            }
+        
+    </script>
+    </head>                 
+    <body>
+        <a href="https://www.marca.es">Marca</a><br>
+        <a href="https://as.es">As</a><br>
+        <a href="https://www.eldiario.es">Diario</a><br>
+    </body>
+</html>

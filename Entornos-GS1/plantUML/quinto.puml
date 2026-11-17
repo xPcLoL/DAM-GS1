@@ -1,0 +1,78 @@
+@startuml
+abstract class "Usuario" {
+    -alias : string
+    -correo : string
+    -fechaRegistro : Date
+}
+
+class "Jugador" {
+    -ranking : int
+    -pais : string
+}
+
+class "Organizador" {
+    +crearTorneo() : void
+}
+
+class "Torneo" {
+    -id : int
+    -nombre : string
+    -fechaInicio : Date
+    -fechaFin : Date
+    -premio : double
+}
+
+class "Partida" {
+    -codigo : int
+    -ronda : string
+    -duracionEstimada : int
+}
+
+class "Inscripcion" {
+    -fecha : Date
+    -estadoAceptacion : string
+    -puntosAcumulados : int
+}
+
+class "Equipo" {
+    -nombre : string
+    -maxMiembros : int
+}
+
+class "Resultado" {
+    -marcador : string
+    -ganador : string
+}
+
+interface "Competitivo" {
+    +validarNormas() : boolean
+}
+
+abstract class "Videojuego" implements Competitivo {
+    -titulo : string
+    -genero : string
+    -plataforma : string
+}
+
+class "Estrategia" {
+    -recursosIniciales : int
+}
+
+class "Disparos" {
+    -tipoArmamento : string
+}
+Usuario <|-- Jugador
+Usuario <|-- Organizador
+Organizador "1" -- "0.." Torneo : crea
+Torneo "1" *-- "1.." Partida
+Jugador "1" -- "0.." Inscripcion
+Torneo "1" -- "0.." Inscripcion
+Equipo "0.." o-- "1.." Jugador
+Partida "1" -- "2.." Equipo
+Partida "1" -- "1" Resultado : registra
+Videojuego <|-- Estrategia
+Videojuego <|-- Disparos
+Torneo "0.." -- "1" Videojuego
+
+note "Padre/Hijo = <|- - Composicion = *- - Agregacion = º- - Asociacion = <--"  as N1
+@enduml

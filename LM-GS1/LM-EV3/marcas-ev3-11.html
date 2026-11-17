@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Formulario de insercion de contactos con indexedDB</title>
+    <script>
+        document.addEventListener('DOMContentLoaded', function(){
+
+            var request = window.indexedDB.open('profesores', 1);
+
+            request.onerror = function(event){
+                console.log("Error al abrir la base de datos");
+            }
+
+            request.onsuccess = function(event){
+                var db = event.target.result;
+                //Abrimos la tabla para lectura y escritura
+                var transaction = db.transaction(['profesores'],'readwrite');
+                var store = transaction.objectStore('profesores');
+                var profesoresDatos = [
+                    {nombre: 'Alvaro', especialidad:'Bases de datos'},
+                    {nombre: 'Juan', especialidad:'Sistemas informaticos'},
+                    {nombre: 'Carlos', especialidad:'Entornos de desarrollo'},
+                    {nombre: 'Agustin', especialidad:'Programacion'},
+                    {nombre: 'Andrea', especialidad:'ingles'}
+                ];
+
+                profesoresDatos.forEach(function(profesor){
+                    store.add(profesor);
+                });
+                var cursorRequest = store.openCursor();
+                cursorRequest.onsuccess = function(event){
+                    var cursor = event.target.result;
+                    if(cursor){
+                        console.log("ID:",cursor.key);
+                        console.log("Nombre:",cursor.value.nombre);
+                        console.log("Especialidad:", cursor.value.espacialidad);
+                        cursor.continue();
+                    }
+                }
+            };
+            request.onupgradeneeded = function(event){
+                var db = event.target.result;
+                //Crear un campo id como clave principal y valor autoincrementativo
+                var store = db.createObjectStore('profesores', {autoIncrement:'id'});
+                //Crear indices para los campos nombre y especialidad
+                store.createIndex('nombreIndex', 'nombre', {unique: false});
+                store.createIndex('especialidadIndex', 'especialidad', {unique: false});
+            };
+        });   
+        </script>
+        </head> 

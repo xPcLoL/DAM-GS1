@@ -1,0 +1,445 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description"
+        content="Portfolio de desarrollador Full Stack - Estudiante de DAM especializado en Java, Python, JavaScript y más">
+    <title>Tu Nombre | Full Stack Developer</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Fira+Code:wght@300;400;500;600;700&display=swap"
+        rel="stylesheet">
+    <link rel="stylesheet" href="styles.css">
+</head>
+
+<body>
+
+    <!-- ==================== NAV ==================== -->
+    <nav id="navbar">
+        <div class="nav-container">
+            <a href="#hero" class="nav-logo">&gt;_ portfolio</a>
+            <ul class="nav-links">
+                <li><a href="#about" class="nav-link">sobre_mi</a></li>
+                <li><a href="#skills" class="nav-link">skills</a></li>
+                <li><a href="#projects" class="nav-link">proyectos</a></li>
+                <li><a href="#contact" class="nav-link">contacto</a></li>
+            </ul>
+            <button id="nav-toggle" class="nav-toggle" aria-label="Abrir menú">
+                <span></span><span></span><span></span>
+            </button>
+        </div>
+    </nav>
+
+    <!-- ==================== HERO ==================== -->
+    <section id="hero">
+        <div class="hero-particles" id="hero-particles"></div>
+        <div class="hero-content">
+            <div class="terminal-window">
+                <div class="terminal-header">
+                    <span class="terminal-dot red"></span>
+                    <span class="terminal-dot yellow"></span>
+                    <span class="terminal-dot green"></span>
+                    <span class="terminal-title">terminal — portfolio</span>
+                </div>
+                <div class="terminal-body">
+                    <div class="terminal-line">
+                        <span class="terminal-prompt">visitor@portfolio:~$</span>
+                        <span class="terminal-command" id="typed-name"></span>
+                        <span class="terminal-cursor" id="cursor">█</span>
+                    </div>
+                    <div class="terminal-line terminal-output" id="typed-subtitle" style="opacity:0;">
+                        <span class="output-text"></span>
+                    </div>
+                    <div class="terminal-line terminal-output" id="typed-role" style="opacity:0;">
+                        <span class="output-text"></span>
+                    </div>
+                </div>
+            </div>
+            <div class="hero-cta" id="hero-cta" style="opacity:0;">
+                <a href="#about" class="btn-terminal">&gt; explorar_portfolio()</a>
+            </div>
+        </div>
+        <div class="scroll-indicator" id="scroll-indicator">
+            <span>scroll</span>
+            <div class="scroll-arrow"></div>
+        </div>
+    </section>
+
+    <!-- ==================== STAGGER GRID ==================== -->
+    <section id="stagger-section">
+        <div class="stagger-grid" id="stagger-grid"></div>
+    </section>
+
+    <!-- ==================== ABOUT ==================== -->
+    <section id="about">
+        <div class="section-container">
+            <h2 class="section-title reveal-element">
+                <span class="title-prefix">&gt;</span> sobre_mi<span class="blink">_</span>
+            </h2>
+            <div class="about-grid">
+                <div class="terminal-window about-terminal reveal-element">
+                    <div class="terminal-header">
+                        <span class="terminal-dot red"></span>
+                        <span class="terminal-dot yellow"></span>
+                        <span class="terminal-dot green"></span>
+                        <span class="terminal-title">about.txt</span>
+                    </div>
+                    <div class="terminal-body">
+                        <p class="terminal-text"><span class="comment">// Información personal</span></p>
+                        <p class="terminal-text"><span class="keyword">const</span> <span class="variable">nombre</span>
+                            = <span class="string">"Tu Nombre"</span>;</p>
+                        <p class="terminal-text"><span class="keyword">const</span> <span
+                                class="variable">ubicacion</span> = <span class="string">"España"</span>;</p>
+                        <p class="terminal-text"><span class="keyword">const</span> <span
+                                class="variable">formacion</span> = <span class="string">"DAM - Desarrollo de
+                                Aplicaciones Multiplataforma"</span>;</p>
+                        <p class="terminal-text"><span class="keyword">const</span> <span class="variable">pasion</span>
+                            = <span class="string">"Crear soluciones Full Stack"</span>;</p>
+                        <br>
+                        <p class="terminal-text"><span class="comment">// Bio</span></p>
+                        <p class="terminal-text about-bio">
+                            Estudiante de Desarrollo de Aplicaciones Multiplataforma apasionado por la programación y el
+                            desarrollo web. Me encanta crear aplicaciones completas, desde el backend hasta la interfaz
+                            de usuario, siempre buscando soluciones elegantes y eficientes.
+                        </p>
+                    </div>
+                </div>
+                <div class="about-stats reveal-element">
+                    <div class="stat-card">
+                        <div class="stat-number" data-target="10">0</div>
+                        <div class="stat-label">Proyectos</div>
+                        <div class="stat-bar">
+                            <div class="stat-bar-fill" data-width="75"></div>
+                        </div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-number" data-target="8">0</div>
+                        <div class="stat-label">Lenguajes</div>
+                        <div class="stat-bar">
+                            <div class="stat-bar-fill" data-width="65"></div>
+                        </div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-number" data-target="5">0</div>
+                        <div class="stat-label">Frameworks</div>
+                        <div class="stat-bar">
+                            <div class="stat-bar-fill" data-width="50"></div>
+                        </div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-number" data-target="2">0</div>
+                        <div class="stat-label">Años Aprendiendo</div>
+                        <div class="stat-bar">
+                            <div class="stat-bar-fill" data-width="40"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- ==================== SKILLS / LANGUAGES ==================== -->
+    <section id="skills">
+        <div class="section-container">
+            <h2 class="section-title reveal-element">
+                <span class="title-prefix">&gt;</span> tech_stack<span class="blink">_</span>
+            </h2>
+            <div class="skills-orbit reveal-element" id="skills-orbit">
+                <div class="orbit-center">
+                    <span>&lt;/&gt;</span>
+                    <span class="orbit-label">Full Stack</span>
+                </div>
+            </div>
+            <div class="skills-grid" id="skills-grid">
+                <div class="skill-badge" data-skill="Java">
+                    <span class="skill-icon">☕</span>
+                    <span class="skill-name">Java</span>
+                    <div class="skill-level">
+                        <div class="skill-level-fill" data-level="85"></div>
+                    </div>
+                </div>
+                <div class="skill-badge" data-skill="Python">
+                    <span class="skill-icon">🐍</span>
+                    <span class="skill-name">Python</span>
+                    <div class="skill-level">
+                        <div class="skill-level-fill" data-level="80"></div>
+                    </div>
+                </div>
+                <div class="skill-badge" data-skill="JavaScript">
+                    <span class="skill-icon">⚡</span>
+                    <span class="skill-name">JavaScript</span>
+                    <div class="skill-level">
+                        <div class="skill-level-fill" data-level="75"></div>
+                    </div>
+                </div>
+                <div class="skill-badge" data-skill="HTML/CSS">
+                    <span class="skill-icon">🎨</span>
+                    <span class="skill-name">HTML / CSS</span>
+                    <div class="skill-level">
+                        <div class="skill-level-fill" data-level="90"></div>
+                    </div>
+                </div>
+                <div class="skill-badge" data-skill="SQL">
+                    <span class="skill-icon">🗄️</span>
+                    <span class="skill-name">SQL</span>
+                    <div class="skill-level">
+                        <div class="skill-level-fill" data-level="70"></div>
+                    </div>
+                </div>
+                <div class="skill-badge" data-skill="PHP">
+                    <span class="skill-icon">🐘</span>
+                    <span class="skill-name">PHP</span>
+                    <div class="skill-level">
+                        <div class="skill-level-fill" data-level="65"></div>
+                    </div>
+                </div>
+                <div class="skill-badge" data-skill="Git">
+                    <span class="skill-icon">🔀</span>
+                    <span class="skill-name">Git</span>
+                    <div class="skill-level">
+                        <div class="skill-level-fill" data-level="75"></div>
+                    </div>
+                </div>
+                <div class="skill-badge" data-skill="Android">
+                    <span class="skill-icon">📱</span>
+                    <span class="skill-name">Android</span>
+                    <div class="skill-level">
+                        <div class="skill-level-fill" data-level="60"></div>
+                    </div>
+                </div>
+            </div>
+            <!-- Floating language tags -->
+            <div class="floating-tags" id="floating-tags">
+                <span class="float-tag">Java</span>
+                <span class="float-tag">Python</span>
+                <span class="float-tag">JavaScript</span>
+                <span class="float-tag">HTML5</span>
+                <span class="float-tag">CSS3</span>
+                <span class="float-tag">SQL</span>
+                <span class="float-tag">PHP</span>
+                <span class="float-tag">Git</span>
+                <span class="float-tag">Docker</span>
+                <span class="float-tag">Linux</span>
+                <span class="float-tag">React</span>
+                <span class="float-tag">Node.js</span>
+                <span class="float-tag">MongoDB</span>
+                <span class="float-tag">MySQL</span>
+                <span class="float-tag">Spring</span>
+                <span class="float-tag">REST API</span>
+            </div>
+        </div>
+    </section>
+
+    <!-- ==================== PROJECTS ==================== -->
+    <section id="projects">
+        <div class="section-container">
+            <h2 class="section-title reveal-element">
+                <span class="title-prefix">&gt;</span> proyectos<span class="blink">_</span>
+            </h2>
+            <div class="projects-grid">
+
+                <div class="project-card reveal-element">
+                    <div class="project-header">
+                        <span class="project-folder">📁</span>
+                        <div class="project-links">
+                            <a href="#" class="project-link" title="GitHub">⟨/⟩</a>
+                            <a href="#" class="project-link" title="Demo">↗</a>
+                        </div>
+                    </div>
+                    <h3 class="project-title">Aplicación de Gestión</h3>
+                    <p class="project-desc">Sistema completo de gestión con CRUD, autenticación y panel de
+                        administración. Backend en Java con Spring Boot y frontend responsive.</p>
+                    <div class="project-tech">
+                        <span class="tech-tag">Java</span>
+                        <span class="tech-tag">Spring Boot</span>
+                        <span class="tech-tag">MySQL</span>
+                        <span class="tech-tag">HTML/CSS</span>
+                    </div>
+                </div>
+
+                <div class="project-card reveal-element">
+                    <div class="project-header">
+                        <span class="project-folder">📁</span>
+                        <div class="project-links">
+                            <a href="#" class="project-link" title="GitHub">⟨/⟩</a>
+                            <a href="#" class="project-link" title="Demo">↗</a>
+                        </div>
+                    </div>
+                    <h3 class="project-title">API REST Fullstack</h3>
+                    <p class="project-desc">API RESTful con documentación Swagger, conexión a base de datos y frontend
+                        SPA consumiendo los endpoints.</p>
+                    <div class="project-tech">
+                        <span class="tech-tag">Node.js</span>
+                        <span class="tech-tag">Express</span>
+                        <span class="tech-tag">MongoDB</span>
+                        <span class="tech-tag">React</span>
+                    </div>
+                </div>
+
+                <div class="project-card reveal-element">
+                    <div class="project-header">
+                        <span class="project-folder">📁</span>
+                        <div class="project-links">
+                            <a href="#" class="project-link" title="GitHub">⟨/⟩</a>
+                            <a href="#" class="project-link" title="Demo">↗</a>
+                        </div>
+                    </div>
+                    <h3 class="project-title">App Android</h3>
+                    <p class="project-desc">Aplicación móvil nativa para Android con Material Design, persistencia local
+                        y consumo de APIs externas.</p>
+                    <div class="project-tech">
+                        <span class="tech-tag">Java</span>
+                        <span class="tech-tag">Android SDK</span>
+                        <span class="tech-tag">SQLite</span>
+                        <span class="tech-tag">Retrofit</span>
+                    </div>
+                </div>
+
+                <div class="project-card reveal-element">
+                    <div class="project-header">
+                        <span class="project-folder">📁</span>
+                        <div class="project-links">
+                            <a href="#" class="project-link" title="GitHub">⟨/⟩</a>
+                            <a href="#" class="project-link" title="Demo">↗</a>
+                        </div>
+                    </div>
+                    <h3 class="project-title">Automatización Python</h3>
+                    <p class="project-desc">Suite de scripts para automatización de tareas, web scraping y análisis de
+                        datos con visualización gráfica.</p>
+                    <div class="project-tech">
+                        <span class="tech-tag">Python</span>
+                        <span class="tech-tag">Selenium</span>
+                        <span class="tech-tag">Pandas</span>
+                        <span class="tech-tag">Flask</span>
+                    </div>
+                </div>
+
+                <div class="project-card reveal-element">
+                    <div class="project-header">
+                        <span class="project-folder">📁</span>
+                        <div class="project-links">
+                            <a href="#" class="project-link" title="GitHub">⟨/⟩</a>
+                            <a href="#" class="project-link" title="Demo">↗</a>
+                        </div>
+                    </div>
+                    <h3 class="project-title">E-Commerce Web</h3>
+                    <p class="project-desc">Tienda online completa con carrito de compras, pasarela de pago simulada y
+                        panel de gestión de productos.</p>
+                    <div class="project-tech">
+                        <span class="tech-tag">PHP</span>
+                        <span class="tech-tag">MySQL</span>
+                        <span class="tech-tag">JavaScript</span>
+                        <span class="tech-tag">CSS</span>
+                    </div>
+                </div>
+
+                <div class="project-card reveal-element">
+                    <div class="project-header">
+                        <span class="project-folder">📁</span>
+                        <div class="project-links">
+                            <a href="#" class="project-link" title="GitHub">⟨/⟩</a>
+                            <a href="#" class="project-link" title="Demo">↗</a>
+                        </div>
+                    </div>
+                    <h3 class="project-title">Portfolio Terminal</h3>
+                    <p class="project-desc">Este mismo portfolio con estética de terminal hacker, animaciones con
+                        anime.js y diseño futurista responsive.</p>
+                    <div class="project-tech">
+                        <span class="tech-tag">HTML</span>
+                        <span class="tech-tag">CSS</span>
+                        <span class="tech-tag">JavaScript</span>
+                        <span class="tech-tag">Anime.js</span>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </section>
+
+    <!-- ==================== CONTACT ==================== -->
+    <section id="contact">
+        <div class="section-container">
+            <h2 class="section-title reveal-element">
+                <span class="title-prefix">&gt;</span> contacto<span class="blink">_</span>
+            </h2>
+            <div class="contact-grid">
+                <div class="terminal-window contact-terminal reveal-element">
+                    <div class="terminal-header">
+                        <span class="terminal-dot red"></span>
+                        <span class="terminal-dot yellow"></span>
+                        <span class="terminal-dot green"></span>
+                        <span class="terminal-title">send_message.sh</span>
+                    </div>
+                    <div class="terminal-body">
+                        <form id="contact-form" class="contact-form">
+                            <div class="form-line">
+                                <span class="terminal-prompt">nombre:</span>
+                                <input type="text" id="contact-name" placeholder="Tu nombre" required>
+                            </div>
+                            <div class="form-line">
+                                <span class="terminal-prompt">email:</span>
+                                <input type="email" id="contact-email" placeholder="tu@email.com" required>
+                            </div>
+                            <div class="form-line">
+                                <span class="terminal-prompt">mensaje:</span>
+                                <textarea id="contact-message" placeholder="Escribe tu mensaje..." required></textarea>
+                            </div>
+                            <div class="form-line">
+                                <button type="submit" class="btn-terminal">&gt; enviar_mensaje()</button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+                <div class="contact-info reveal-element">
+                    <div class="contact-links">
+                        <a href="mailto:tu@email.com" class="contact-link-item">
+                            <span class="contact-icon">📧</span>
+                            <span class="contact-text">tu@email.com</span>
+                        </a>
+                        <a href="https://github.com/tuusuario" target="_blank" class="contact-link-item">
+                            <span class="contact-icon">💻</span>
+                            <span class="contact-text">github.com/tuusuario</span>
+                        </a>
+                        <a href="https://linkedin.com/in/tuusuario" target="_blank" class="contact-link-item">
+                            <span class="contact-icon">🔗</span>
+                            <span class="contact-text">linkedin.com/in/tuusuario</span>
+                        </a>
+                    </div>
+                    <div class="terminal-window mini-terminal">
+                        <div class="terminal-header">
+                            <span class="terminal-dot red"></span>
+                            <span class="terminal-dot yellow"></span>
+                            <span class="terminal-dot green"></span>
+                            <span class="terminal-title">status.log</span>
+                        </div>
+                        <div class="terminal-body">
+                            <p class="terminal-text"><span class="comment">// Estado actual</span></p>
+                            <p class="terminal-text"><span class="keyword">status</span>: <span class="string">"Abierto
+                                    a oportunidades"</span></p>
+                            <p class="terminal-text"><span class="keyword">disponible</span>: <span
+                                    class="boolean">true</span></p>
+                            <p class="terminal-text"><span class="keyword">respuesta</span>: <span class="string">"&lt;
+                                    24h"</span></p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- ==================== FOOTER ==================== -->
+    <footer id="footer">
+        <div class="footer-content">
+            <p class="footer-text">&gt; Diseñado y desarrollado con <span class="heart">❤</span> y mucho café ☕</p>
+            <p class="footer-copy">&copy; 2026 Tu Nombre. Todos los derechos reservados.</p>
+        </div>
+    </footer>
+
+    <!-- Scripts -->
+    <script src="https://cdn.jsdelivr.net/npm/animejs@3.2.2/lib/anime.min.js"></script>
+    <script src="script.js"></script>
+</body>
+
+</html>

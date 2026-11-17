@@ -1,0 +1,56 @@
+@startuml veterinario
+title Sistema de gestión de una clínica veterinaria
+
+class Propietario {
+  - idPropietario: String
+  - nombre: String
+  - telefono: String
+  - direccion: String
+  - correoElectronico: String
+  + solicitarCita(animal: Animal): Cita
+  + cancelarCita(cita: Cita): void
+  + consultarCitas(): List<Cita>
+}
+
+class Animal {
+  - idAnimal: String
+  - nombre: String
+  - especie: String
+  - raza: String
+  - edad: int
+  - peso: double
+  + consultarHistorial(): List<Cita>
+}
+
+class Veterinario {
+  - numeroColegiado: String
+  - nombre: String
+  - especialidad: String
+  - horarioAtencion: String
+  + registrarObservaciones(cita: Cita, observaciones: String): void
+  + indicarDiagnostico(cita: Cita, diagnostico: String): void
+  + proponerTratamiento(cita: Cita, tratamiento: String): void
+  + consultarHistorial(animal: Animal): List<Cita>
+}
+
+class Cita {
+  - idCita: String
+  - fecha: Date
+  - hora: String
+  - motivoConsulta: String
+  - estado: String
+  - observaciones: String
+  - diagnostico: String
+  - tratamiento: String
+  + reservar(): void
+  + modificar(): void
+  + cancelar(): void
+  + marcarRealizada(): void
+}
+
+Propietario "1" -- "1..*" Animal : tiene
+Animal "1" -- "0..*" Cita : acude a
+Veterinario "1" -- "0..*" Cita : atiende
+Propietario "1" -- "0..*" Cita : solicita
+
+@enduml

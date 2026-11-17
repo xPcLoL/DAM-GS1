@@ -1,0 +1,72 @@
+@startuml
+' --- JERARQUÍA DE EMPLEADOS ---
+abstract class "Empleado" {
+    -id : int
+    -nombre : string
+    -apellidos : string
+    -salario : int
+}
+
+interface "Atendedor" {
+    +atenderPersona() : void
+}
+
+class "Medico" implements Atendedor {
+    -especialidad : string
+    -numColegiado : int
+}
+
+class "Enfermero" implements Atendedor {
+    -unidadAsignada : string
+}
+
+
+
+class "Paciente" {
+    -numHistorial : int
+    -nombre : string
+    -fechaNacimiento : Date
+    -grupoSanguineo : string
+}
+
+class "Consulta" {
+    -fecha : Date
+    -motivo : string
+    -observaciones : string
+}
+
+
+class "Receta"{
+    -codigo : int
+    -fechaEmision : Date
+    -indicaciones : string
+}
+
+class "LineaMedication"{
+    -medicamento : string
+    -dosis : string
+    -frecuencia : string
+}
+
+class "Habitacion"{
+    -numero : int
+    -planta : int
+    -tipo : string
+}
+
+class "Ingreso"{
+    -fechaIngreso : Date
+    -fechaAlta : Date
+}
+Empleado <|-- Medico
+Empleado <|-- Enfermero
+Paciente "1" *-- "0.." Consulta
+Consulta "0.." -- "1" Medico : atendida por
+Consulta "1" --> "0..1" Receta : emite
+Receta "1" *-- "1.." LineaMedication
+Habitacion "1" *-- "0.." Ingreso
+Paciente "1" -- "0.." Ingreso
+
+
+note "Padre/Hijo = <|- - Composicion = *- - Agregacion = º- - Asociacion = <--"  as N1
+@enduml

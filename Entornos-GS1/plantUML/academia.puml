@@ -1,0 +1,67 @@
+@startuml academia
+title Sistema de gestión de una academia de actividades extraescolares
+
+class Alumno {
+  - numeroExpediente: String
+  - nombre: String
+  - edad: int
+  - curso: String
+  + matricularse(actividad: Actividad): Matricula
+  + consultarActividades(): List<Actividad>
+}
+
+abstract class Actividad {
+  - codigo: String
+  - nombre: String
+  - duracionSemanal: int
+  - precioMensual: double
+  + darAlta(): void
+  + asignarMonitor(monitor: Monitor): void
+  + consultarInformacion(): String
+}
+
+class ActividadDeportiva {
+  - lugarEntrenamiento: String
+  - requiereEquipacion: boolean
+  + comprobarEquipacion(): boolean
+}
+
+class ActividadArtistica {
+  - materialNecesario: String
+  - tieneMuestraFinal: boolean
+  + prepararMuestraFinal(): void
+}
+
+class Monitor {
+  - idMonitor: String
+  - nombre: String
+  - telefono: String
+  - especialidad: String
+  + consultarActividadesImpartidas(): List<Actividad>
+}
+
+class Matricula {
+  - fechaInscripcion: Date
+  - activa: boolean
+  + cancelar(): void
+  + activar(): void
+}
+
+class Espacio {
+  - numero: String
+  - capacidadMaxima: int
+  - tipoUso: String
+  + comprobarCapacidad(): int
+}
+
+Actividad <|-- ActividadDeportiva
+Actividad <|-- ActividadArtistica
+
+Alumno "1" -- "0..*" Matricula : realiza
+Matricula "0..*" -- "1" Actividad : corresponde a
+
+Monitor "1" -- "0..*" Actividad : imparte
+
+Espacio "1" o-- "0..*" Actividad : contiene / acoge
+
+@enduml

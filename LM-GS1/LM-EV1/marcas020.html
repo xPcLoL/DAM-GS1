@@ -1,0 +1,50 @@
+<html>
+    <head>
+        <title>Llamarada</title>
+        <style type="text/css">
+            img{position: absolute;}
+        </style>
+        <script language="JavaScript">
+            objeto = null;
+            function cargar(){
+            //alert(event.x + " - " + event.y);
+            if(event.srcElement.className == "movil"){
+                objeto = event.srcElement;
+            }
+        }
+            function mover(){
+            if(objeto!=null){
+                objeto.style.left = event.x;
+                objeto.style.top = event.y;
+            }
+        }
+        function soltar(){
+            if(((parseInt(objeto.style.left)+ objeto.width)<(parseInt(papelera.style.left))||
+            (parseInt(objeto.style.left))>(parseInt(papelera.style.left)))||
+            ((parseInt(objeto.style.top)+objeto.heigth)<(parseInt(papelera.style.top)))||
+            ((parseInt(objeto.style.top))>(parseInt(papelera.style.top)+papelera.heigth))){
+            }else{
+                if(objeto == mechero){
+                    papelera.src="imagenes/fogo.jfif"
+                }else{
+                objeto.style.display = "none";
+                }
+            }
+             
+            
+            
+            objeto = null;
+        }
+        </script>
+    </head>
+    <body onmousedown="cargar()"  onmousemove="mover(); return false"  onmouseup="soltar()">
+        <img src="imagenes/raspberry-pi.jpg" id="imagen1" width="150" height="150" style="left: 100;top: 50;" class="movil">
+        <img src="imagenes/Arduino_Uno_-_R3.jpg" id="imagen2" width="150" height="150" style="left: 300;top: 50;" class="movil">
+        <img src="imagenes/board_columnas.jpg" id="imagen3" width="150" height="150" style="left: 500;top: 50;" class="movil">
+        <img src="imagenes/multimetro.jpg" id="imagen4" width="150" height="150" style="left: 700;top: 50;" class="movil">
+        <img src="imagenes/mech.jpg" id="mechero" width="150" height="150" style="left: 100;top: 500;" class="movil">
+
+        <img src="imagenes/linuxbasura.jfif" id="papelera" width="150" height="150" style="left: 900;top: 250;">
+        
+    </body>
+</html>

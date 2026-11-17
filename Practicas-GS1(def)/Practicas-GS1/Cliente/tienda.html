@@ -1,0 +1,1250 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+  <meta charset="UTF-8" />
+  <title>Tienda Online - Harmèlys</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+
+  <!-- Fuente Google -->
+  <link
+    href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@500;700&family=Nunito:wght@300;400;600&display=swap"
+    rel="stylesheet" />
+
+  <!-- Bootstrap 5.3.2 (cumple 5.2+ vía CDN) -->
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet" />
+
+  <!-- Estilos propios -->
+  <link href="css/styles.css" rel="stylesheet" />
+</head>
+
+<body>
+
+  <!-- NAVBAR FIJA (igual que index) -->
+  <nav class="navbar navbar-expand-lg navbar-dark fixed-top">
+    <div class="container-fluid px-4">
+      <!-- Spacer left (mirrors right side for centering) -->
+      <div style="min-width: 48px;"></div>
+
+      <!-- ISOTIPO 2 centered absolutely in navbar -->
+      <div
+        style="position: absolute; left: 50%; transform: translateX(-50%); height: 100%; display: flex; align-items: center; pointer-events: none;">
+        <img src="imagenes/tienda_png/ISOTIPO 2.png" alt="Harmelys isotipo" class="navbar-isotipo"
+          style="width: auto; object-fit: contain; pointer-events: auto;" />
+      </div>
+
+      <!-- Right Side: 3 Dots Menu with Badge -->
+      <div class="d-flex align-items-center gap-3 navbar-controls ms-auto">
+        <!-- 3 Dots Menu Button with Notification Badge -->
+        <button id="headerMenuToggleBtn" class="btn-menu-dots" aria-label="Menu Principal" style="position: relative;">
+          <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 24 24" fill="currentColor">
+            <circle cx="5" cy="12" r="2"></circle>
+            <circle cx="12" cy="12" r="2"></circle>
+            <circle cx="19" cy="12" r="2"></circle>
+          </svg>
+          <!-- Badge de notificación (oculto si cart-count es 0) -->
+          <span class="menu-notification-badge" id="menu-badge" style="display: none;">0</span>
+        </button>
+      </div>
+    </div>
+  </nav>
+
+  <!-- HEADER DROPDOWN MENU (Horizontal) -->
+  <div id="headerDropdownMenu" class="header-dropdown-panel">
+    <div class="container py-4">
+      <ul class="list-unstyled text-center mb-0 d-flex justify-content-center flex-wrap gap-3 gap-lg-5">
+        <li><a class="header-nav-link" href="index.html">Inicio</a></li>
+        <li><a class="header-nav-link active" href="tienda.html">Tienda</a></li>
+        <li>
+          <a class="header-nav-link" href="#" id="reservasHeaderLink" data-bs-toggle="offcanvas"
+            data-bs-target="#offcanvasCart" style="position: relative;">
+            Reservas
+            <span class="menu-notification-badge" id="reservas-header-badge"
+              style="display: none; position: absolute; top: -6px; right: -14px;">0</span>
+          </a>
+        </li>
+      </ul>
+    </div>
+  </div>
+
+
+  <!-- BOTTOM RIGHT DRAWER MENU -->
+  <div id="bottomDrawerOverlay" class="drawer-overlay"></div>
+  <div id="bottomDrawerMenu" class="bottom-drawer-menu">
+    <nav class="drawer-nav">
+      <a class="drawer-menu-link" href="index.html">Inicio</a>
+      <a class="drawer-menu-link active" href="tienda.html">Tienda</a>
+      <a class="drawer-menu-link" href="#" id="reservasDrawerLink" data-bs-toggle="offcanvas"
+        data-bs-target="#offcanvasCart" style="position: relative;">
+        Reservas
+        <span class="menu-notification-badge" id="reservas-drawer-badge"
+          style="display: none; position: absolute; top: 50%; transform: translateY(-50%); right: 16px;">0</span>
+      </a>
+    </nav>
+  </div>
+
+  <!-- CABECERA TIENDA -->
+  <header class="shop-hero">
+    <div class="container position-relative shop-hero-center">
+    </div>
+  </header>
+
+  <!-- FILTROS + ORDEN -->
+  <section class="pt-3 pb-2">
+    <div class="container">
+      <div class="row align-items-center g-3">
+        <div class="col-6 col-md-8">
+          <!-- Dropdown de categorías -->
+          <div class="category-dropdown-container">
+            <button id="categoryDropdownBtn" class="category-dropdown-btn">
+              TODOS
+              <svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" fill="currentColor" viewBox="0 0 16 16"
+                style="margin-left: 5px;">
+                <path fill-rule="evenodd"
+                  d="M1.646 4.646a.5.5 0 0 1 .708 0L8 10.293l5.646-5.647a.5.5 0 0 1 .708.708l-6 6a.5.5 0 0 1-.708 0l-6-6a.5.5 0 0 1 0-.708z" />
+              </svg>
+            </button>
+            <div id="categoryDropdownMenu" class="category-dropdown-menu">
+              <!-- Opciones dinámicas cargadas por JS -->
+            </div>
+          </div>
+        </div>
+
+        <div class="col-6 col-md-4 text-end">
+          <div class="sort-dropdown-container">
+            <button id="sortDropdownBtn" class="sort-dropdown-btn">
+              ORDENAR
+              <svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" fill="currentColor" viewBox="0 0 16 16"
+                style="margin-left: 5px;">
+                <path fill-rule="evenodd"
+                  d="M1.646 4.646a.5.5 0 0 1 .708 0L8 10.293l5.646-5.647a.5.5 0 0 1 .708.708l-6 6a.5.5 0 0 1-.708 0l-6-6a.5.5 0 0 1 0-.708z" />
+              </svg>
+            </button>
+            <div id="sortDropdownMenu" class="sort-dropdown-menu">
+              <a href="#" class="sort-option" data-sort="alpha">Alfabéticamente</a>
+              <a href="#" class="sort-option" data-sort="price-asc">Precio (asc)</a>
+              <a href="#" class="sort-option" data-sort="price-desc">Precio (desc)</a>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- GRID DE PRODUCTOS (mínimo 8) -->
+  <main class="py-4">
+    <div class="container">
+      <div class="row g-4" id="product-list">
+        <!-- Productos cargados dinámicamente vía JS -->
+      </div>
+      <!-- Paginación -->
+      <div id="product-pagination" class="mt-4"></div>
+    </div>
+  </main>
+
+  <!-- ESPECIALIDADES DE TEMPORADA (Oculto por defecto) -->
+  <section id="seasonal-section" class="py-4 d-none">
+    <div class="container">
+      <h2 class="section-heading text-center mb-4" style="color: var(--color-acento);">Especialidades de temporada</h2>
+      <div class="row g-4" id="seasonal-list">
+        <!-- Productos de reserva cargados dinámicamente -->
+      </div>
+    </div>
+  </section>
+
+
+
+  <!-- OFFCANVAS CARRITO (Bootstrap) -->
+  <div class="offcanvas offcanvas-end offcanvas-cart" tabindex="-1" id="offcanvasCart"
+    aria-labelledby="offcanvasCartLabel">
+    <div class="offcanvas-header">
+      <h5 class="offcanvas-title" id="offcanvasCartLabel"
+        style="font-family: 'Courier New', monospace; font-weight: bold;">Mi Reserva</h5>
+      <button type="button" class="btn-close text-reset" data-bs-dismiss="offcanvas" aria-label="Cerrar"></button>
+    </div>
+    <div class="offcanvas-body d-flex flex-column" style="font-family: 'Courier New', monospace;">
+      <!-- Lista de productos -->
+      <div id="cart-items-container" class="mb-3">
+        <p class="text-muted mb-0" id="cart-empty-text">No hay reservas pendientes.</p>
+      </div>
+
+      <!-- Resumen -->
+      <div class="mt-auto pt-3 border-top">
+        <!-- Formulario de Contacto para Reserva -->
+        <div class="mb-3">
+          <label for="reserva-nombre" class="form-label small">Nombre completo</label>
+          <input type="text" class="form-control form-control-sm" id="reserva-nombre" required>
+        </div>
+        <div class="mb-3">
+          <label for="reserva-email" class="form-label small">Email</label>
+          <input type="email" class="form-control form-control-sm" id="reserva-email" required>
+        </div>
+        <div class="mb-3">
+          <label for="reserva-telefono" class="form-label small">Teléfono</label>
+          <input type="tel" class="form-control form-control-sm" id="reserva-telefono" required>
+        </div>
+        <div class="mb-3">
+          <label for="reserva-fecha" class="form-label small">Fecha de Recogida</label>
+          <input type="date" class="form-control form-control-sm" id="reserva-fecha" required>
+        </div>
+
+        <div class="d-flex justify-content-between align-items-center mb-2">
+          <span>Total</span>
+          <span class="cart-total" id="cart-total">0,00 €</span>
+        </div>
+        <div class="d-flex justify-content-between">
+          <button class="btn-clear-cart" type="button" id="btn-clear-cart">Borrar</button>
+          <button class="btn-checkout" type="button" id="btn-confirm-reservation">Confirmar Reserva</button>
+        </div>
+        <div id="reservation-message" class="mt-2 small text-center"></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Special Like You - separador sobre el footer -->
+  <div style="background-color: #EDDEC8; text-align: center; padding: 2rem 1rem 0;">
+    <img src="imagenes/tienda_png/SPECIAL LIKE YOU ONDA.png" alt="Special Like You"
+      style="max-width: 520px; width: 90%; height: auto; opacity: 0.85;" />
+  </div>
+
+  <!-- FOOTER -->
+  <footer>
+    <div class="container">
+      <div class="row g-4">
+        <div class="col-md-4">
+          <div class="footer-brand mb-2">Harmélys</div>
+          <p class="mb-2">Panadería & Pastelería Artesanal desde 1999.</p>
+          <p class="mb-1"><strong>Dirección:</strong> C. de Ramón J. Sender, 3, Delicias, 50017 Zaragoza</p>
+          <p class="mb-1"><strong>Teléfono:</strong> 876 65 40 44</p>
+          <p class="mb-0"><strong>Email:</strong> <a href="mailto:hola@harmelys.com"
+              class="footer-link">hola@harmelys.com</a></p>
+        </div>
+
+        <div class="col-md-4">
+          <h4 class="h6 text-uppercase mb-3">Enlaces rápidos</h4>
+          <ul class="list-unstyled">
+            <li><a href="index.html" class="footer-link">Inicio</a></li>
+            <li><a href="tienda.html" class="footer-link">Tienda Online</a></li>
+            <li><a href="index.html#contacto" class="footer-link">Contacto</a></li>
+            <li><a href="#" class="footer-link">Aviso Legal</a></li>
+            <li><a href="#" class="footer-link">Política de Privacidad</a></li>
+          </ul>
+        </div>
+
+        <div class="col-md-4">
+          <h4 class="h6 text-uppercase mb-3">Síguenos</h4>
+          <div class="mb-3">
+            <a href="#" class="social-icon" aria-label="Facebook Harmélys">f</a>
+            <a href="#" class="social-icon" aria-label="Instagram Harmélys">in</a>
+          </div>
+          <p class="mb-0">Novedades del obrador, nuevas creaciones y sorteos exclusivos en redes sociales.</p>
+        </div>
+      </div>
+
+      <div class="footer-bottom d-flex flex-column flex-md-row justify-content-between align-items-center">
+        <span>© <span id="year-span"></span> Harmélys. Todos los derechos reservados.</span>
+        <span class="mt-2 mt-md-0">Desarrollado para prácticas de panadería artesanal.</span>
+      </div>
+    </div>
+  </footer>
+
+  <!-- MODAL DETALLE PRODUCTO -->
+  <div id="productModal" class="product-modal-overlay" role="dialog" aria-modal="true">
+    <div class="product-modal-card">
+      <button class="product-modal-close" id="productModalClose" aria-label="Cerrar">&times;</button>
+      <div class="product-modal-body">
+        <div class="product-modal-img-wrap">
+          <img id="productModalImg" src="" alt="" class="product-modal-img" />
+        </div>
+        <div class="product-modal-info">
+          <div class="product-modal-header">
+            <h2 class="product-modal-name" id="productModalName"></h2>
+            <span class="product-modal-price" id="productModalPrice"></span>
+          </div>
+          <p class="product-modal-desc" id="productModalDesc"></p>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Bootstrap JS (bundle) -->
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+
+  <script>
+    // ==========================
+    //  DATOS INICIALES (Desde API)
+    // ==========================
+    // URL BACKEND (Dinámica para Local/Red/Prod)
+    const getApiUrl = () => {
+      const host = window.location.hostname;
+      if (host === 'localhost' || host === '127.0.0.1') {
+        return 'http://localhost:3000/api';
+      } else if (host.startsWith('192.') || host.startsWith('172.') || host.startsWith('10.')) {
+        return `http://${host}:3000/api`;
+      } else {
+        return '/api';
+      }
+    };
+    const API_URL = getApiUrl();
+    let allProducts = [];
+
+    async function fetchProducts() {
+      try {
+        const response = await fetch(`${API_URL}/products`);
+        if (response.ok) {
+          allProducts = await response.json();
+          processProducts(allProducts);
+          // Restaurar filtros si es necesario
+        } else {
+          document.getElementById("product-list").innerHTML = `<div class="col-12 text-center text-danger py-5">Error al cargar productos del servidor.</div>`;
+        }
+      } catch (error) {
+        document.getElementById("product-list").innerHTML = `<div class="col-12 text-center text-danger py-5">Error de conexión con el servidor.</div>`;
+      }
+    }
+
+    let regularProducts = [];
+    let reservaProducts = [];
+
+    function processProducts(products) {
+      // Separar productos tipo "Reservas" (case-insensitive check just in case)
+      regularProducts = products.filter(p => !p.tipo || p.tipo.toLowerCase() !== "reservas");
+      reservaProducts = products.filter(p => p.tipo && p.tipo.toLowerCase() === "reservas");
+
+      renderProducts(regularProducts);
+      renderSeasonalSection(reservaProducts);
+    }
+
+    // ==========================
+    //  RENDERIZADO
+    // ==========================
+    const productList = document.getElementById("product-list");
+
+    const PRODUCTS_PER_PAGE = 8;
+    let currentPage = 0;
+    let currentProductList = [];
+
+    function renderProducts(productsToRender, resetPage = true) {
+      if (resetPage) currentPage = 0;
+      currentProductList = productsToRender;
+      renderPage();
+    }
+
+    function renderPage() {
+      productList.innerHTML = "";
+
+      if (!currentProductList || currentProductList.length === 0) {
+        productList.innerHTML = `<div class="col-12 text-center text-muted py-5">No se encontraron productos.</div>`;
+        renderPagination();
+        return;
+      }
+
+      const start = currentPage * PRODUCTS_PER_PAGE;
+      const pageProducts = currentProductList.slice(start, start + PRODUCTS_PER_PAGE);
+
+      pageProducts.forEach(p => {
+        const imgSrc = p.imagen_url || "imagenes/tienda_productos/producto_tienda_generico.png";
+        const categorySlug = p.tipo ? p.tipo.toLowerCase() : "otros";
+
+        const col = document.createElement("div");
+        col.className = "col-6 col-lg-3 product-item";
+        col.setAttribute("data-category", categorySlug);
+        col.setAttribute("data-price", p.precio.toFixed(2));
+
+        col.innerHTML = `
+          <div class="product-card product-card-clickable"
+               data-nombre="${p.nombre}"
+               data-precio="${formatPrice(p.precio)}"
+               data-descripcion="${(p.descripcion || 'Sin descripción').replace(/"/g, '&quot;')}"
+               data-img="${imgSrc}">
+            <img src="${imgSrc}" alt="${p.nombre}" class="product-card-img" />
+            <div class="product-card-name">${p.nombre}</div>
+          </div>
+        `;
+        productList.appendChild(col);
+      });
+
+      // Abrir modal al clicar tarjeta
+      document.querySelectorAll(".product-card-clickable").forEach(card => {
+        card.addEventListener("click", () => {
+          openProductModal(
+            card.dataset.nombre,
+            card.dataset.precio,
+            card.dataset.descripcion,
+            card.dataset.img
+          );
+        });
+      });
+
+      renderPagination();
+    }
+
+    function renderPagination() {
+      const container = document.getElementById("product-pagination");
+      if (!container) return;
+      container.innerHTML = "";
+
+      const total = currentProductList ? currentProductList.length : 0;
+      const totalPages = Math.ceil(total / PRODUCTS_PER_PAGE);
+      if (totalPages <= 1) return;
+
+      const hasPrev = currentPage > 0;
+      const hasNext = currentPage < totalPages - 1;
+
+      container.innerHTML = `
+        <div class="pagination-controls">
+          <button class="pagination-arrow" id="btn-prev-page" ${hasPrev ? '' : 'disabled'} aria-label="Página anterior">
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <polyline points="15 18 9 12 15 6"></polyline>
+            </svg>
+          </button>
+          <span class="pagination-info">${currentPage + 1} / ${totalPages}</span>
+          <button class="pagination-arrow" id="btn-next-page" ${hasNext ? '' : 'disabled'} aria-label="Página siguiente">
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <polyline points="9 18 15 12 9 6"></polyline>
+            </svg>
+          </button>
+        </div>
+      `;
+
+      document.getElementById("btn-prev-page")?.addEventListener("click", () => {
+        if (currentPage > 0) { currentPage--; renderPage(); window.scrollTo({ top: 0, behavior: 'smooth' }); }
+      });
+      document.getElementById("btn-next-page")?.addEventListener("click", () => {
+        if (currentPage < totalPages - 1) { currentPage++; renderPage(); window.scrollTo({ top: 0, behavior: 'smooth' }); }
+      });
+    }
+
+    // ==========================
+    //  RENDERIZADO ESPECIALIDADES
+    // ==========================
+    const seasonalSection = document.getElementById("seasonal-section");
+    const seasonalList = document.getElementById("seasonal-list");
+
+    function renderSeasonalSection(reservas) {
+      // Mostrar todos los productos de tipo "Reservas"
+      const activeReservas = reservas;
+
+      if (activeReservas.length === 0) {
+        seasonalSection.classList.add("d-none");
+        return;
+      }
+
+      seasonalSection.classList.remove("d-none");
+      seasonalList.innerHTML = "";
+
+      activeReservas.forEach(p => {
+        const imgSrc = p.imagen_url || "imagenes/tienda_productos/producto_tienda_generico.png";
+
+        const col = document.createElement("div");
+        col.className = "col-sm-6 col-lg-3 product-item";
+
+        col.innerHTML = `
+          <div class="product-card">
+            <img src="${imgSrc}" alt="${p.nombre}" class="img-fluid" />
+            <div class="p-3 d-flex flex-column flex-grow-1">
+              <h3 class="h6 mb-1 product-name">${p.nombre}</h3>
+              <p class="small text-muted mb-2">${p.descripcion || "Descripcion del producto"}</p>
+              <div class="mt-auto d-flex justify-content-between align-items-center">
+                <span class="product-price">${formatPrice(p.precio)}</span>
+                <button class="btn-primary-custom btn-reserve" type="button"
+                  data-id="${p._id}" 
+                  data-name="${p.nombre}"
+                  data-price="${p.precio}"
+                  data-limit="${p.limite_compra ?? ''}">Reservar</button>
+              </div>
+            </div>
+          </div>
+        `;
+        seasonalList.appendChild(col);
+      });
+
+      // Attach event listeners for Reserve buttons
+      seasonalList.querySelectorAll(".btn-reserve").forEach((btn) => {
+        btn.addEventListener("click", () => {
+          const id = btn.getAttribute("data-id");
+          const name = btn.getAttribute("data-name");
+          const price = parseFloat(btn.getAttribute("data-price"));
+          const limit = btn.getAttribute("data-limit") ? parseInt(btn.getAttribute("data-limit")) : null;
+          const added = addToCart(id, name, price, limit);
+
+          if (added) {
+            // Open the cart automatically
+            const offcanvasCart = new bootstrap.Offcanvas(document.getElementById('offcanvasCart'));
+            offcanvasCart.show();
+          } else {
+            // Show limit feedback on button
+            btn.textContent = `Máx. ${limit} por pedido`;
+            btn.disabled = true;
+            setTimeout(() => {
+              btn.textContent = 'Reservar';
+              btn.disabled = false;
+            }, 2000);
+          }
+        });
+      });
+    }
+
+    // ==========================
+    //  MODAL DETALLE PRODUCTO
+    // ==========================
+    const productModal = document.getElementById('productModal');
+    const productModalClose = document.getElementById('productModalClose');
+
+    function openProductModal(nombre, precio, descripcion, imgSrc) {
+      document.getElementById('productModalName').textContent = nombre;
+      const priceEl = document.getElementById('productModalPrice');
+      // Ocultar precio solo si es exactamente 0,00 € (parseFloat no funciona con comas)
+      const isZero = !precio || precio.trim() === '0,00 €' || precio.trim() === '0.00 €';
+      priceEl.textContent = isZero ? '' : precio;
+      priceEl.style.display = isZero ? 'none' : '';
+      document.getElementById('productModalDesc').textContent = descripcion;
+      const modalImg = document.getElementById('productModalImg');
+      modalImg.src = imgSrc;
+      modalImg.alt = nombre;
+      productModal.classList.add('active');
+      document.body.style.overflow = 'hidden';
+    }
+
+    function closeProductModal() {
+      productModal.classList.remove('active');
+      document.body.style.overflow = '';
+    }
+
+    productModalClose.addEventListener('click', closeProductModal);
+    productModal.addEventListener('click', (e) => {
+      if (e.target === productModal) closeProductModal();
+    });
+    document.addEventListener('keydown', (e) => {
+      if (e.key === 'Escape') closeProductModal();
+    });
+
+    // ==========================
+    //  CARRITO (JS básico)
+    // ==========================
+
+    // URL BACKEND (Dinámica para Local/Red/Prod)
+
+
+    // Estructura: { id, name, price, quantity }
+    const cart = [];
+
+    const cartItemsContainer = document.getElementById("cart-items-container");
+    const cartTotalEl = document.getElementById("cart-total");
+    const cartEmptyText = document.getElementById("cart-empty-text");
+    const clearCartBtn = document.getElementById("btn-clear-cart");
+
+    function formatPrice(value) {
+      return value.toFixed(2).replace(".", ",") + " €";
+    }
+
+    function updateCartUI() {
+      cartItemsContainer.innerHTML = "";
+
+      if (cart.length === 0) {
+        cartEmptyText.style.display = "block";
+        cartItemsContainer.appendChild(cartEmptyText);
+      } else {
+        cartEmptyText.style.display = "none";
+
+        cart.forEach((item) => {
+          const row = document.createElement("div");
+          row.classList.add("cart-item", "d-flex", "justify-content-between", "align-items-center");
+
+          const atLimit = item.limit !== null && item.limit !== undefined && item.quantity >= item.limit;
+          const increaseBtnAttrs = atLimit
+            ? `type="button" data-action="increase" data-id="${item.id}" aria-label="Aumentar" disabled title="Límite: ${item.limit} por pedido"`
+            : `type="button" data-action="increase" data-id="${item.id}" aria-label="Aumentar"`;
+
+          row.innerHTML = `
+            <div>
+              <div class="cart-item-title">${item.name}</div>
+              <div class="small text-muted">${formatPrice(item.price)} x ${item.quantity}${atLimit ? ` <span style="color: #c0392b; font-size:0.75em;">(máx. ${item.limit})</span>` : ''}</div>
+            </div>
+            <div class="cart-item-controls d-flex align-items-center gap-2">
+              <button type="button" data-action="decrease" data-id="${item.id}" aria-label="Disminuir">-</button>
+              <span style="min-width: 20px; text-align: center;">${item.quantity}</span>
+              <button ${increaseBtnAttrs}>+</button>
+              <button type="button" data-action="remove" data-id="${item.id}" title="Eliminar" aria-label="Eliminar">×</button>
+            </div>
+          `;
+
+          cartItemsContainer.appendChild(row);
+        });
+      }
+
+      const totalItems = cart.reduce((sum, item) => sum + item.quantity, 0);
+      const totalPrice = cart.reduce((sum, item) => sum + item.price * item.quantity, 0);
+
+      cartTotalEl.textContent = formatPrice(totalPrice);
+
+      // Update notification badges
+      const menuBadge = document.getElementById('menu-badge');
+      const menuBadgeBottom = document.getElementById('menu-badge-bottom');
+
+      if (totalItems > 0) {
+        // Show badges with count
+        menuBadge.textContent = totalItems;
+        menuBadge.style.display = 'flex';
+        if (menuBadgeBottom) {
+          menuBadgeBottom.textContent = totalItems;
+          menuBadgeBottom.style.display = 'flex';
+        }
+        // Update Reservas link badges
+        const drawerBadge = document.getElementById('reservas-drawer-badge');
+        const headerBadge = document.getElementById('reservas-header-badge');
+        if (drawerBadge) { drawerBadge.textContent = totalItems; drawerBadge.style.display = 'flex'; }
+        if (headerBadge) { headerBadge.textContent = totalItems; headerBadge.style.display = 'flex'; }
+      } else {
+        // Hide badges when cart is empty
+        menuBadge.style.display = 'none';
+        if (menuBadgeBottom) {
+          menuBadgeBottom.style.display = 'none';
+        }
+        const drawerBadge = document.getElementById('reservas-drawer-badge');
+        const headerBadge = document.getElementById('reservas-header-badge');
+        if (drawerBadge) { drawerBadge.style.display = 'none'; }
+        if (headerBadge) { headerBadge.style.display = 'none'; }
+      }
+    }
+
+    function addToCart(id, name, price, limit = null) {
+      const existing = cart.find((p) => p.id === id);
+      const currentQty = existing ? existing.quantity : 0;
+
+      // Enforce purchase limit
+      if (limit !== null && currentQty >= limit) {
+        return false; // Limit reached, don't add
+      }
+
+      if (existing) {
+        existing.quantity += 1;
+      } else {
+        cart.push({ id, name, price, quantity: 1, limit });
+      }
+      updateCartUI();
+      return true;
+    }
+
+    function changeQuantity(id, delta) {
+      const item = cart.find((p) => p.id === id); // id es string
+      if (!item) return;
+
+      // Enforce limit when increasing
+      if (delta > 0 && item.limit !== null && item.limit !== undefined && item.quantity >= item.limit) {
+        return; // Limit reached, don't increase
+      }
+
+      item.quantity += delta;
+      if (item.quantity <= 0) {
+        const idx = cart.indexOf(item);
+        cart.splice(idx, 1);
+      }
+      updateCartUI();
+    }
+
+    function removeFromCart(id) {
+      const idx = cart.findIndex((p) => p.id === id);
+      if (idx !== -1) {
+        cart.splice(idx, 1);
+        updateCartUI();
+      }
+    }
+
+    function clearCart() {
+      cart.length = 0;
+      updateCartUI();
+    }
+
+    // Delegación para controles del carrito (dentro del contenedor)
+    cartItemsContainer.addEventListener("click", (e) => {
+      const target = e.target;
+      const action = target.getAttribute("data-action");
+      const id = target.getAttribute("data-id"); // IDs son string ahora
+      if (!action || !id) return;
+
+      if (action === "increase") changeQuantity(id, 1);
+      if (action === "decrease") changeQuantity(id, -1);
+      if (action === "remove") removeFromCart(id);
+    });
+
+    // Vaciar carrito
+    clearCartBtn.addEventListener("click", clearCart);
+
+    // ==========================
+    //  LOGICA RESERVA (Checkout)
+    // ==========================
+    const confirmBtn = document.getElementById("btn-confirm-reservation");
+    const messageEl = document.getElementById("reservation-message");
+
+    confirmBtn.addEventListener("click", async () => {
+      if (cart.length === 0) {
+        alert("El carrito está vacío.");
+        return;
+      }
+
+      const nombre = document.getElementById("reserva-nombre").value.trim();
+      const email = document.getElementById("reserva-email").value.trim();
+      const telefono = document.getElementById("reserva-telefono").value.trim();
+      const fecha = document.getElementById("reserva-fecha").value;
+
+      if (!nombre || !email || !telefono || !fecha) {
+        alert("Por favor, completa todos los campos de contacto y la fecha de recogida.");
+        return;
+      }
+
+      // Preparar datos
+      const reservationData = {
+        nombre_cliente: nombre,
+        email_cliente: email,
+        telefono_cliente: telefono,
+        fecha_recogida: fecha, // Enviar fecha seleccionada
+        items: cart.map(item => ({
+          producto_id: item.id, // Asegurarse de que sea el ID de mongo
+          nombre_producto: item.name,
+          cantidad: item.quantity,
+          precio_unitario: item.price
+        })),
+        total_reserva: cart.reduce((sum, item) => sum + item.price * item.quantity, 0)
+      };
+
+      // UI Loading
+      confirmBtn.disabled = true;
+      confirmBtn.textContent = "Procesando...";
+      messageEl.textContent = "";
+      messageEl.className = "mt-2 small text-center";
+
+      try {
+        const response = await fetch(`${API_URL}/reservations`, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify(reservationData)
+        });
+
+        const result = await response.json();
+
+        if (response.ok) {
+          // Éxito
+          messageEl.textContent = "¡Reserva enviada con éxito! Revisa tu correo.";
+          messageEl.classList.add("text-success");
+
+          // Limpiar
+          cart.length = 0;
+          updateCartUI();
+          document.getElementById("reserva-nombre").value = "";
+          document.getElementById("reserva-email").value = "";
+          document.getElementById("reserva-telefono").value = "";
+          document.getElementById("reserva-fecha").value = "";
+
+          // Cerrar offcanvas después de 2s
+          setTimeout(() => {
+            const offcanvasEl = document.getElementById('offcanvasCart');
+            const modal = bootstrap.Offcanvas.getInstance(offcanvasEl);
+            if (modal) modal.hide();
+
+            confirmBtn.disabled = false;
+            confirmBtn.textContent = "Confirmar Reserva";
+            messageEl.textContent = "";
+          }, 2000);
+
+        } else {
+          throw new Error(result.error || "Error al procesar reserva");
+        }
+
+      } catch (error) {
+        messageEl.textContent = "Error: " + error.message;
+        messageEl.classList.add("text-danger");
+        confirmBtn.disabled = false;
+        confirmBtn.textContent = "Confirmar Reserva";
+      }
+    });
+
+    // ==========================
+    //  FILTROS DINÁMICOS (DROPDOWN)
+    // ==========================
+
+    async function fetchCategories() {
+      try {
+        const response = await fetch(`${API_URL}/categories`);
+        if (response.ok) {
+          const categories = await response.json();
+          renderCategoryDropdown(categories);
+        }
+      } catch (err) {
+      }
+    }
+
+    function renderCategoryDropdown(categories) {
+      const categoryDropdownMenu = document.getElementById('categoryDropdownMenu');
+      const categoryDropdownBtn = document.getElementById('categoryDropdownBtn');
+
+      if (!categoryDropdownMenu || !categoryDropdownBtn) {
+        return;
+      }
+
+      // Limpiar menú
+      categoryDropdownMenu.innerHTML = '';
+
+      // Agregar opción "Todos"
+      const allOption = document.createElement('a');
+      allOption.href = '#';
+      allOption.className = 'category-option active';
+      allOption.dataset.category = 'all';
+      allOption.textContent = 'Todos';
+      categoryDropdownMenu.appendChild(allOption);
+
+      // Filtrar solo TIPOS (kind = 'type') y excluir "Reservas"
+      const types = categories.filter(c =>
+        c.kind === 'type' && c.name.toLowerCase() !== 'reservas'
+      );
+
+      // Agregar opciones de categorías
+      types.forEach(cat => {
+        const option = document.createElement('a');
+        option.href = '#';
+        option.className = 'category-option';
+        option.dataset.category = cat.name;
+        option.textContent = cat.name;
+        categoryDropdownMenu.appendChild(option);
+      });
+
+      // Configurar eventos
+      setupCategoryDropdownEvents();
+    }
+
+    function setupCategoryDropdownEvents() {
+      const categoryDropdownBtn = document.getElementById('categoryDropdownBtn');
+      const categoryDropdownMenu = document.getElementById('categoryDropdownMenu');
+      const categoryOptions = document.querySelectorAll('.category-option');
+
+      if (!categoryDropdownBtn || !categoryDropdownMenu) {
+        return;
+      }
+
+      // Toggle dropdown
+      categoryDropdownBtn.addEventListener('click', (e) => {
+        e.preventDefault();
+        e.stopPropagation();
+        e.stopImmediatePropagation();
+
+        const isOpen = categoryDropdownMenu.classList.contains('show');
+
+        // Cerrar otros menús si están abiertos
+        if (!isOpen) {
+          // Cerrar sort dropdown si está abierto
+          const sortDropdownMenu = document.getElementById('sortDropdownMenu');
+          const sortBtn = document.getElementById('sortDropdownBtn');
+          if (sortDropdownMenu && sortDropdownMenu.classList.contains('show')) {
+            sortDropdownMenu.classList.remove('show');
+            if (sortBtn) sortBtn.classList.remove('active');
+          }
+        }
+
+        // Toggle category dropdown
+        if (isOpen) {
+          categoryDropdownMenu.classList.remove('show');
+          categoryDropdownBtn.classList.remove('active');
+        } else {
+          categoryDropdownMenu.classList.add('show');
+          categoryDropdownBtn.classList.add('active');
+        }
+      }, true); // Use capture phase
+
+      // Cerrar al hacer clic fuera
+      document.addEventListener('click', (e) => {
+        const categoryContainer = categoryDropdownBtn.closest('.category-dropdown-container');
+        if (categoryContainer && categoryContainer.contains(e.target)) {
+          return;
+        }
+
+        if (categoryDropdownMenu.classList.contains('show')) {
+          categoryDropdownMenu.classList.remove('show');
+          categoryDropdownBtn.classList.remove('active');
+        }
+      });
+
+      // Manejar selección de categoría
+      categoryOptions.forEach(option => {
+        option.addEventListener('click', (e) => {
+          e.preventDefault();
+          e.stopPropagation();
+
+          const category = option.dataset.category;
+
+          // Actualizar UI
+          categoryOptions.forEach(opt => opt.classList.remove('active'));
+          option.classList.add('active');
+
+          // Actualizar texto del botón
+          const categoryText = option.textContent;
+          // Reemplazar todo el contenido del botón manteniendo el SVG
+          const svg = categoryDropdownBtn.querySelector('svg');
+          categoryDropdownBtn.textContent = categoryText.toUpperCase();
+          categoryDropdownBtn.appendChild(svg);
+
+          // Aplicar filtro (comprobar tipo o especialidad)
+          let filtered;
+          if (category === 'all') {
+            filtered = regularProducts;
+          } else {
+            filtered = regularProducts.filter(p => p.tipo === category || p.categoria_especial === category);
+          }
+
+          // Mantener orden actual si hay uno activo
+          const activeOption = document.querySelector('.sort-option.active');
+          if (activeOption) {
+            applySort(filtered, activeOption.dataset.sort);
+          } else {
+            renderProducts(filtered);
+          }
+
+          // Cerrar dropdown
+          categoryDropdownMenu.classList.remove('show');
+          categoryDropdownBtn.classList.remove('active');
+        });
+      });
+    }
+
+    // ========================================
+    // SORT DROPDOWN LOGIC
+    // ========================================
+    function applySort(list, sortValue) {
+      const listCopy = [...list];
+      if (sortValue === "price-asc") {
+        listCopy.sort((a, b) => a.precio - b.precio);
+      } else if (sortValue === "price-desc") {
+        listCopy.sort((a, b) => b.precio - a.precio);
+      } else if (sortValue === "alpha") {
+        listCopy.sort((a, b) => a.nombre.localeCompare(b.nombre));
+      }
+      renderProducts(listCopy);
+    }
+
+    const sortDropdownBtn = document.getElementById('sortDropdownBtn');
+    const sortDropdownMenu = document.getElementById('sortDropdownMenu');
+    const sortOptions = document.querySelectorAll('.sort-option');
+
+    if (sortDropdownBtn && sortDropdownMenu) {
+      // Toggle dropdown with capture phase to intercept event early
+      sortDropdownBtn.addEventListener('click', (e) => {
+        e.preventDefault();
+        e.stopPropagation();
+        e.stopImmediatePropagation();
+
+        const isOpen = sortDropdownMenu.classList.contains('show');
+
+        // Close any other open menus first
+        if (!isOpen) {
+          // Close header dropdown if open
+          const headerDropdown = document.getElementById('headerDropdownMenu');
+          if (headerDropdown && headerDropdown.classList.contains('show')) {
+            headerDropdown.classList.remove('show');
+            const headerBtn = document.getElementById('headerMenuToggleBtn');
+            if (headerBtn) headerBtn.classList.remove('active');
+          }
+
+          // Close bottom drawer if open
+          const bottomDrawer = document.getElementById('bottomDrawerMenu');
+          if (bottomDrawer && bottomDrawer.classList.contains('show')) {
+            bottomDrawer.classList.remove('show');
+            const drawerOverlay = document.getElementById('bottomDrawerOverlay');
+            if (drawerOverlay) drawerOverlay.classList.remove('show');
+            const fabBtn = document.querySelector('.fab-menu');
+            if (fabBtn) fabBtn.classList.remove('active');
+          }
+
+          // Close category dropdown if open
+          const categoryDropdownMenu = document.getElementById('categoryDropdownMenu');
+          const categoryBtn = document.getElementById('categoryDropdownBtn');
+          if (categoryDropdownMenu && categoryDropdownMenu.classList.contains('show')) {
+            categoryDropdownMenu.classList.remove('show');
+            if (categoryBtn) categoryBtn.classList.remove('active');
+          }
+        }
+
+        // Toggle sort dropdown
+        if (isOpen) {
+          sortDropdownMenu.classList.remove('show');
+          sortDropdownBtn.classList.remove('active');
+        } else {
+          sortDropdownMenu.classList.add('show');
+          sortDropdownBtn.classList.add('active');
+        }
+
+        return false;
+      }, true); // Use capture phase
+
+      // Close on outside click - but exclude sort dropdown elements
+      document.addEventListener('click', (e) => {
+        // Check if click is inside sort dropdown container
+        const sortContainer = sortDropdownBtn.closest('.sort-dropdown-container');
+        if (sortContainer && sortContainer.contains(e.target)) {
+          // Click is inside sort dropdown, don't close
+          return;
+        }
+
+        // Click is outside, close if open
+        if (sortDropdownMenu.classList.contains('show')) {
+          sortDropdownMenu.classList.remove('show');
+          sortDropdownBtn.classList.remove('active');
+        }
+      });
+
+      // Handle Option Click
+      sortOptions.forEach(option => {
+        option.addEventListener('click', (e) => {
+          e.preventDefault();
+          e.stopPropagation();
+
+          // UI Update
+          sortOptions.forEach(opt => opt.classList.remove('active'));
+          option.classList.add('active');
+
+          // Logic Update
+          const sortValue = option.dataset.sort;
+
+          // Obtener la lista filtrada actual
+          const activeCategoryOption = document.querySelector('.category-option.active');
+          const category = activeCategoryOption ? activeCategoryOption.dataset.category : 'all';
+
+          let currentList;
+          if (category === "all") {
+            currentList = regularProducts;
+          } else {
+            currentList = regularProducts.filter(p => p.tipo === category || p.categoria_especial === category);
+          }
+
+          applySort(currentList, sortValue);
+
+          // Close dropdown
+          sortDropdownMenu.classList.remove('show');
+          sortDropdownBtn.classList.remove('active');
+        });
+      });
+    }
+
+
+    // Año footer
+    document.getElementById("year-span").textContent = new Date().getFullYear();
+
+    // Estado inicial
+    updateCartUI();
+    fetchCategories(); // Cargar filtros primero
+    fetchProducts();
+    // Fecha mínima para el input date (3 días después de hoy)
+    const today = new Date();
+    today.setDate(today.getDate() + 3);
+    const minDate = today.toISOString().split('T')[0];
+    document.getElementById("reserva-fecha").setAttribute('min', minDate);
+
+
+
+    // ==========================
+    //  STICKY BOTTOM NAV (Dynamic)
+    // ==========================
+    const bottomNav = document.createElement('div');
+    bottomNav.className = 'sticky-bottom-nav';
+    bottomNav.innerHTML = `
+      <div class="container-fluid px-4 d-flex justify-content-end align-items-end w-100" style="height: 100%; padding-bottom: 20px;">
+        
+        <!-- Right: FAB Menu Button with Badge -->
+        <div class="bottom-controls d-flex align-items-center gap-3" style="pointer-events: none;">
+           <!-- FAB Menu Button with Notification Badge -->
+           <button class="fab-menu" type="button" aria-label="Menu" style="position: relative;">
+              <div class="fab-icon">
+                <span></span><span></span><span></span>
+              </div>
+              <!-- Badge de notificación en FAB -->
+              <span class="menu-notification-badge" id="menu-badge-bottom" style="display: none;">0</span>
+           </button>
+        </div>
+      </div>
+    `;
+    document.body.appendChild(bottomNav);
+
+    // ==========================
+    //  SCROLL LOGIC (Split Header/Footer)
+    // ==========================
+    const navbar = document.querySelector('.navbar');
+
+    // This will be set later when header menu is initialized
+    let headerMenuToClose = null;
+    let headerButtonToDeactivate = null;
+
+    window.addEventListener('scroll', () => {
+      // 1/8th of page height
+      const threshold = window.innerHeight / 8;
+
+      if (window.scrollY > threshold) {
+        // Hide Top Header
+        navbar.classList.add('header-hidden');
+        // Show Bottom Nav
+        bottomNav.classList.add('visible');
+      } else {
+        // Show Top Header
+        navbar.classList.remove('header-hidden');
+        // Hide Bottom Nav
+        bottomNav.classList.remove('visible');
+      }
+
+      // Close header menu on scroll
+      if (headerMenuToClose && headerMenuToClose.classList.contains('show')) {
+        headerMenuToClose.classList.remove('show');
+        if (headerButtonToDeactivate) {
+          headerButtonToDeactivate.classList.remove('active');
+        }
+      }
+    });
+
+    // ========================================
+    // HEADER DROPDOWN MENU FUNCTIONALITY
+    // ========================================
+    const headerMenuToggleBtn = document.getElementById('headerMenuToggleBtn');
+    const headerDropdownMenu = document.getElementById('headerDropdownMenu');
+
+    if (headerMenuToggleBtn && headerDropdownMenu) {
+
+      // Toggle header dropdown menu
+      headerMenuToggleBtn.addEventListener('click', (e) => {
+        e.preventDefault();
+        e.stopPropagation();
+
+        const isOpen = headerDropdownMenu.classList.contains('show');
+
+        if (isOpen) {
+          headerDropdownMenu.classList.remove('show');
+          headerMenuToggleBtn.classList.remove('active');
+        } else {
+          headerDropdownMenu.classList.add('show');
+          headerMenuToggleBtn.classList.add('active');
+        }
+      });
+
+      // Cerrar al hacer clic fuera
+      document.addEventListener('click', (e) => {
+        const isClickInsideMenu = headerDropdownMenu.contains(e.target);
+        const isClickOnButton = headerMenuToggleBtn.contains(e.target);
+        if (!isClickInsideMenu && !isClickOnButton && headerDropdownMenu.classList.contains('show')) {
+          headerDropdownMenu.classList.remove('show');
+          headerMenuToggleBtn.classList.remove('active');
+        }
+      });
+
+      // Close when clicking a link
+      const headerLinks = headerDropdownMenu.querySelectorAll('a');
+      headerLinks.forEach(link => {
+        link.addEventListener('click', (e) => {
+          // Allow the link to work, then close the menu
+          setTimeout(() => {
+            headerDropdownMenu.classList.remove('show');
+            headerMenuToggleBtn.classList.remove('active');
+          }, 100);
+        });
+      });
+
+      // Set references for scroll handler
+      headerMenuToClose = headerDropdownMenu;
+      headerButtonToDeactivate = headerMenuToggleBtn;
+    } else {
+    }
+
+    // ========================================
+    // BOTTOM DRAWER MENU FUNCTIONALITY
+    // ========================================
+    const fabMenuBtn = document.querySelector('.fab-menu');
+    const bottomDrawerMenu = document.getElementById('bottomDrawerMenu');
+    const drawerOverlay = document.getElementById('bottomDrawerOverlay');
+    const menuBadge = document.getElementById('menu-badge');
+    const drawerBadge = document.getElementById('reservas-drawer-badge');
+    const headerBadge = document.getElementById('reservas-header-badge');
+
+    if (fabMenuBtn && bottomDrawerMenu && drawerOverlay) {
+
+      // Toggle drawer menu
+      function toggleDrawer() {
+        const isOpen = bottomDrawerMenu.classList.contains('show');
+
+        if (isOpen) {
+          bottomDrawerMenu.classList.remove('show');
+          drawerOverlay.classList.remove('show');
+          fabMenuBtn.classList.remove('active');
+        } else {
+          bottomDrawerMenu.classList.add('show');
+          drawerOverlay.classList.add('show');
+          fabMenuBtn.classList.add('active');
+        }
+      }
+
+      // Menu button click
+      fabMenuBtn.addEventListener('click', (e) => {
+        // Check if the click originated from the sort dropdown area
+        const sortDropdownContainer = document.querySelector('.sort-dropdown-container');
+        if (sortDropdownContainer && sortDropdownContainer.contains(e.target)) {
+          return; // Ignore clicks from sort dropdown
+        }
+
+        e.stopPropagation();
+        toggleDrawer();
+      });
+
+      // Overlay click to close
+      drawerOverlay.addEventListener('click', () => {
+        toggleDrawer();
+      });
+
+      // Close drawer when clicking on a link (except Reservas which opens offcanvas)
+      document.querySelectorAll('.drawer-menu-link').forEach(link => {
+        link.addEventListener('click', () => {
+          // Small delay to allow navigation
+          setTimeout(() => {
+            if (bottomDrawerMenu.classList.contains('show')) {
+              toggleDrawer();
+            }
+          }, 100);
+        });
+      });
+
+      // Close drawer on scroll
+      window.addEventListener('scroll', () => {
+        if (bottomDrawerMenu.classList.contains('show')) {
+          bottomDrawerMenu.classList.remove('show');
+          drawerOverlay.classList.remove('show');
+          fabMenuBtn.classList.remove('active');
+        }
+      }, { passive: true });
+    } else {
+    }
+
+    // Sync badge count between menu button, drawer, and header
+    function updateAllBadges() {
+      if (!menuBadge) return;
+
+      const count = parseInt(menuBadge.textContent) || 0;
+
+      if (count > 0) {
+        // Drawer badge
+        if (drawerBadge) {
+          drawerBadge.textContent = count;
+          drawerBadge.style.display = 'flex';
+        }
+        // Header badge
+        if (headerBadge) {
+          headerBadge.textContent = count;
+          headerBadge.style.display = 'flex';
+        }
+      } else {
+        if (drawerBadge) {
+          drawerBadge.style.display = 'none';
+        }
+        if (headerBadge) {
+          headerBadge.style.display = 'none';
+        }
+      }
+    }
+    // Sync inicial de badges
+    updateAllBadges();
+
+  </script>
+</body>
+
+</html>

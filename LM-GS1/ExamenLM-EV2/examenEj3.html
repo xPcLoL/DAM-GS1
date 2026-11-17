@@ -1,0 +1,66 @@
+<html>
+<head>
+    <title>Ejercicio 3</title>
+    <script type="text/javascript" src="jquery-3.7.1.min.js"></script>
+    <script language="JavaScript">
+        $(document).ready(function(){
+            var img1 = $("<img>",{src:"imagenes/fondo0.jpg"});
+            var img2 = $("<img>",{src:"imagenes/fondo1.jfif"});
+            var img3 = $("<img>",{src:"imagenes/fogo.jfif"});
+            var img4 = $("<img>",{src:"imagenes/descarga.jfif"});
+
+            $("td").eq(0).append(img1);
+            $("td").eq(1).append(img2);
+            $("td").eq(2).append(img3);
+            $("td").eq(3).append(img4);
+
+            $("table").mousemove(function(event){
+                $("#coordenadas").text( event.pageX + "-" + event.pageY);
+                $("#coordenadas").css("visibility", "visible");
+            });
+            $("img").click(function(){
+                $(this).animate({width:"200px",height:"200px"},1000);
+            });
+            $("#ocultar").click(function(){
+                $("img").hide(2000);
+            });
+            $("#mostrar").click(function(){
+                $("img").show(2000);
+            });
+        });
+    </script>
+    <style type="text/css">
+        td{
+            border: 2px solid;
+            text-align: center;
+            width: 150px;
+            height: 150px;
+            transition: background-color 0.5s;
+        }
+
+        td:hover{
+            background-color: green;
+        }
+
+        img{
+            width: 100px;
+            height: 100px;
+        }
+    </style>
+</head>
+<body>
+    <table>
+        <tr>
+            <td></td>
+            <td></td>
+        </tr>
+        <tr>
+            <td></td>
+            <td></td>
+        </tr>
+    </table>
+    <div id="coordenadas" style="visibility: hidden;"></div>
+    <input type="button" id="ocultar" value="ocultar imagenes">
+    <input type="button" id="mostrar" value="mostrar imagenes">
+</body>
+</html>

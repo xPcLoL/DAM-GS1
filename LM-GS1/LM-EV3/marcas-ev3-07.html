@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Almacenamiento de contactos con IndexedDB</title>
+    <script>
+        document.addEventListener('DOMContentLoaded', function(){
+            // 1. Referencia a la lista HTML (¡Te faltaba esto!)
+            var lista = document.getElementById('contactosList');
+
+            var request = window.indexedDB.open('contactos', 1);
+
+            request.onupgradeneeded = function(event) {
+                var db = event.target.result;
+                if (!db.objectStoreNames.contains('contactos')) {
+                    db.createObjectStore('contactos', { keyPath: 'id' });
+                }
+            };
+
+            request.onsuccess = function(event){
+                var db = event.target.result;
+                var transaction = db.transaction(['contactos'], 'readonly');
+                var store = transaction.objectStore('contactos');
+                var cursorRequest = store.openCursor();
+
+                cursorRequest.onsuccess = function(event){
+                    var cursor = event.target.result;
+                    if(cursor){
+                        var li = document.createElement('li');
+                        // CORRECCIÓN: Era cursor.value.nombre (no curso)
+                        li.textContent = `ID: ${cursor.value.id}, Nombre: ${cursor.value.nombre}`;
+                        lista.appendChild(li);
+                        
+                        cursor.continue(); 
+                    } else {
+                        console.log("No hay más registros.");
+                    }
+                };
+
+                cursorRequest.onerror = function(){
+                    console.log('Error al mostrar los contactos');
+                };
+            }; // Cierre correcto de onsuccess
+        });
+    </script>
+</head>
+<body>
+    <h1>CONTACTOS</h1>
+    <ul id="contactosList"></ul>
+</body>
+</html>

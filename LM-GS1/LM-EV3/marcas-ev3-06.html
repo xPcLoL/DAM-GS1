@@ -1,0 +1,42 @@
+<html>
+    <head>
+        <title>Almacenamiento de contactos con IndexedDB</title>
+        <script language="JavaScript">
+            document.addEventListener('DOMContentLoaded', function(){ //DOMContentLoaded es que se ejecuta al iniciar la pagina
+                //Abrir o crear la base de datos
+                var request = window.indexedDB.open('contactos', 1);
+                request.onerror = function(event){
+                    console.log("Ha habido un error al abrir la base de datos");
+                }
+                //Actualizacion de version de la base de datos
+                request.onupgradeneeded = function(event) {
+                    var db = event.target.result;
+                    // Creamos la "tabla" llamada contactos y le decimos que use el 'id' como clave
+                    db.createObjectStore('contactos', { keyPath: 'id' });
+                    console.log("Tabla creada con éxito");
+                };
+                request.onsuccess = function(event){
+                    var db = event.target.result;
+                    //Realizar la transaccion de escrituta en la base de datos
+                    var transaction = db.transaction(['contactos'], 'readwrite');
+                    var store = transaction.objectStore('contactos'); //Aqui abro la tabla si no existe, y si existe apunto a ella
+                    //Insertar un registro
+                    var contacto1 = {id: 1, nombre: 'Pepe'};
+                    var addRequest1 = store.add(contacto1);
+                    addRequest1.onsuccess = function(event){
+                        console.log("Exitoo")
+                    }
+                    var contacto2 = {id: 2, nombre: 'Pepe2'};
+                    var addRequest2 = store.add(contacto2);
+                    addRequest2.onsuccess = function(event){
+                        console.log("Exitoo")
+                    }
+                }
+                
+            })
+        </script>
+    </head>
+    <body>
+
+    </body>
+</html>

@@ -1,0 +1,35 @@
+<html>
+    <head>
+        <title>Ejercicio 2</title>
+        <style type="text/css">
+            
+            img{
+                position: absolute;
+            }
+        </style>
+        <script language="JavaScript">
+            contar = 0
+            detenedor = false
+            function empezar(){
+                if(detenedor == false){
+                contar++
+                contador.innerHTML = contar
+                octane.style.left=parseInt(octane.style.left) +5;
+                }else{
+                    return false;
+                }
+            }
+            function detener(){
+                detenedor = true
+            }
+        </script>
+    </head>
+    <body>
+        
+            <img id="octane"src="octane.jfif" width="300" height="300" style="left: 200;">
+        
+        <h1 id="contador">0</h1>
+        <button onclick="setInterval('empezar()', 1000); detenedor=false;">Activar</button>
+        <button onclick="detener()">Detener</button>
+    </body>
+</html>

@@ -1,0 +1,75 @@
+@startuml
+abstract class "Persona" {
+    -id : int
+    -nombre : string
+    -telefono : int
+    -correo : string
+}
+
+class "Cliente" {
+    -direccionPrincipal : string
+}
+
+class "Repartidor" {
+    -zonaAsignada : string
+    -tipoVehiculo : string
+}
+
+class "Restaurante" {
+    -id : int
+    -nombreComercial : string
+    -direccion : string
+    -horario : string
+}
+
+class "Producto" {
+    -nombre : string
+    -descripcion : string
+    -precio : double
+    -disponibilidad : boolean
+}
+
+class "Pedido" {
+    -numero : int
+    -fecha : Date
+    -estado : string
+    -costeTotal : double
+}
+
+class "LineaPedido" {
+    -cantidad : int
+    -subtotal : double
+}
+
+interface "MetodoPago" {
+    +procesarPago(monto : double) : boolean
+}
+
+class "Tarjeta" implements MetodoPago {
+    -numeroTarjeta : string
+    -fechaCaducidad : string
+}
+
+class "PayPal" implements MetodoPago {
+    -emailCuenta : string
+}
+
+class "Reseña" {
+    -puntuacion : int
+    -comentario : string
+}
+
+
+Persona <|-- Cliente
+Persona <|-- Repartidor
+Restaurante "1" *-- "0.." Producto
+Pedido "1" *-- "1.." LineaPedido
+Cliente "1" -- "0.." Pedido :realiza
+Repartidor "1" -- "0.." Pedido :gestiona
+LineaPedido "0.." -- "1" Producto :referencia
+Cliente "1" -- "0.." Reseña 
+Restaurante "1" -- "0.." Reseña
+Pedido "0.." -- "1" MetodoPago :se paga con
+
+note "Padre/Hijo = <|- - Composicion = *- - Agregacion = º- - Asociacion = <--"  as N1
+@enduml

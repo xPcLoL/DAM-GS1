@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Almacenamiento de contactos con IndexedDB</title>
+    <script>
+        document.addEventListener('DOMContentLoaded', function(){
+            var lista = document.getElementById('contactosList');
+
+            var request = window.indexedDB.open('contactos', 1);
+
+            request.onupgradeneeded = function(event) {
+                var db = event.target.result;
+                if (!db.objectStoreNames.contains('contactos')) {
+                    db.createObjectStore('contactos', { keyPath: 'id' });
+                }
+            };
+
+            request.onsuccess = function(event){
+                var db = event.target.result;
+                var transaction = db.transaction(['contactos'], 'readonly');
+                var store = transaction.objectStore('contactos');
+                var cursorRequest = store.openCursor();
+
+                cursorRequest.onsuccess = function(event){
+                    var cursor = event.target.result;
+                    while(cursor){
+                        var contacto = cursor.value;
+                        var row = contactosTable.insertRow();
+                        var idCell = row.insertCell();
+                        var nombreCell = row.insertCell();
+                        idCell.textContent = contacto.id;
+                        nombreCell.textContent = contacto.nombre;
+                        cursor = cursor.continue();  //asi se recarga cursor dentro del bucle
+                    }
+                };
+
+                cursorRequest.onerror = function(){
+                    console.log('Error al mostrar los contactos');
+                };
+            };
+        });
+    </script>
+</head>
+<body>
+    <h1>CONTACTOS</h1>
+    <table id="contactosTable">
+        <thead>
+            <tr><th>ID</th><th>Nombre</th></tr>
+        </thead>
+        <tbody>
+            
+        </tbody>
+    </table>
+</body>
+</html>

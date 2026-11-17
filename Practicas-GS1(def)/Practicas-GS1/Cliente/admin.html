@@ -1,0 +1,1219 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+    <meta charset="UTF-8" />
+    <title>Admin - Harmèlys</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+
+    <!-- Fuente Google -->
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;700&display=swap" rel="stylesheet" />
+
+    <!-- Bootstrap 5.3.2 -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet" />
+
+    <!-- Estilos propios (misma paleta) -->
+    <link href="css/styles.css" rel="stylesheet" />
+
+    <style>
+        /* Estilos específicos para el panel de admin */
+        body {
+            padding-top: 0;
+            /* Override para login centrado */
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            font-family: 'Segoe UI', 'Roboto', -apple-system, BlinkMacSystemFont, sans-serif;
+        }
+
+        .admin-container {
+            flex-grow: 1;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 2rem;
+        }
+
+        .login-card {
+            background-color: var(--color-crema);
+            border-radius: 20px;
+            padding: 2.5rem;
+            box-shadow: 0 20px 40px rgba(35, 66, 96, 0.2);
+            width: 100%;
+            max-width: 400px;
+            border: 1px solid rgba(35, 66, 96, 0.1);
+        }
+
+        .dashboard-container {
+            display: none;
+            /* Oculto por defecto */
+            width: 100%;
+            max-width: 1200px;
+            margin: 0 auto;
+            padding-top: 40px;
+            padding-bottom: 40px;
+        }
+
+        .dashboard-header {
+            margin-bottom: 2rem;
+            border-bottom: 2px solid var(--color-primario);
+            padding-bottom: 1rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .dashboard-header h2 {
+            font-weight: 600;
+            font-size: 1.75rem;
+            margin: 0;
+            line-height: 1;
+        }
+
+        .dashboard-header .d-flex {
+            align-items: center;
+        }
+
+        .dashboard-header img {
+            margin-top: 12px;
+        }
+
+        .form-control,
+        .form-select {
+            border-radius: 10px;
+            border: 1px solid rgba(35, 66, 96, 0.2);
+            padding: 0.7rem 1rem;
+        }
+
+        .form-control:focus,
+        .form-select:focus {
+            box-shadow: 0 0 0 3px rgba(35, 66, 96, 0.15);
+            border-color: var(--color-primario);
+        }
+
+        .list-group-item {
+            background-color: rgba(255, 255, 255, 0.5);
+            border: 1px solid rgba(35, 66, 96, 0.1);
+            margin-bottom: 0.5rem;
+            border-radius: 10px !important;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+
+        .product-thumb {
+            width: 50px;
+            height: 50px;
+            object-fit: cover;
+            border-radius: 8px;
+            margin-right: 1rem;
+        }
+
+        .btn-delete {
+            color: #dc3545;
+            background: none;
+            border: 1px solid #dc3545;
+            border-radius: 999px;
+            padding: 0.25rem 0.75rem;
+            font-size: 0.8rem;
+            transition: all 0.2s;
+        }
+
+        .btn-delete:hover {
+            background-color: #dc3545;
+            color: white;
+        }
+
+        /* TABS PERSONALIZADOS PREMIUM */
+        .admin-tabs-container {
+            display: inline-flex;
+            background-color: rgba(35, 66, 96, 0.1);
+            /* Fondo suave */
+            border-radius: 999px;
+            padding: 0.3rem;
+            position: relative;
+            margin-bottom: 2rem;
+        }
+
+        .admin-tab-btn {
+            background-color: transparent;
+            border: none;
+            border-radius: 999px;
+            padding: 0.6rem 2rem;
+            font-weight: 600;
+            color: var(--color-primario);
+            letter-spacing: 0.02em;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            position: relative;
+            z-index: 1;
+        }
+
+        .admin-tab-btn.active {
+            background-color: var(--color-primario);
+            color: #EDDEC8;
+            box-shadow: 0 4px 12px rgba(35, 66, 96, 0.2);
+        }
+
+        .admin-tab-btn:hover:not(.active) {
+            background-color: rgba(35, 66, 96, 0.05);
+        }
+
+        /* CUSTOM WRAPPER FOR RESERVATIONS */
+        .reservations-wrapper {
+            background-color: rgba(35, 66, 96, 0.03);
+            /* Un poco más oscuro que el fondo crema */
+            border-radius: 15px;
+            padding: 2rem;
+            margin-top: 1rem;
+        }
+
+        /* SUBTABS (Pendientes / Completadas) */
+        .admin-subtabs-container {
+            display: inline-flex;
+            gap: 1rem;
+            margin-bottom: 2rem;
+            border-bottom: 2px solid rgba(35, 66, 96, 0.1);
+            padding-bottom: 0.5rem;
+            width: 100%;
+        }
+
+        .admin-subtab-btn {
+            background: none;
+            border: none;
+            font-weight: 600;
+            color: #6c757d;
+            padding: 0.5rem 1rem;
+            position: relative;
+            cursor: pointer;
+            transition: all 0.2s;
+            font-size: 1.1rem;
+        }
+
+        .admin-subtab-btn.active {
+            color: var(--color-primario);
+        }
+
+        .admin-subtab-btn.active::after {
+            content: '';
+            position: absolute;
+            bottom: -0.6rem;
+            left: 0;
+            width: 100%;
+            height: 3px;
+            background-color: var(--color-primario);
+            border-radius: 3px 3px 0 0;
+        }
+
+        /* ESTILOS TABS CATEGORIAS (Override Bootstrap) */
+        #catTabs {
+            border-bottom: none;
+            gap: 0.5rem;
+        }
+
+        #catTabs .nav-link {
+            border: none;
+            background-color: rgba(35, 66, 96, 0.05);
+            color: var(--color-primario);
+            border-radius: 8px;
+            padding: 0.5rem 1rem;
+            font-weight: 600;
+            transition: all 0.2s;
+        }
+
+        #catTabs .nav-link:hover {
+            background-color: rgba(35, 66, 96, 0.1);
+        }
+
+        #catTabs .nav-link.active {
+            background-color: var(--color-primario);
+            color: #EDDEC8;
+            box-shadow: 0 4px 10px rgba(35, 66, 96, 0.15);
+        }
+
+        .btn-delete-res {
+            position: absolute;
+            bottom: 10px;
+            right: 10px;
+            background: none;
+            border: none;
+            color: #dc3545;
+            font-size: 1.1rem;
+            cursor: pointer;
+            transition: transform 0.2s, color 0.2s;
+            z-index: 10;
+            /* Encima del card click */
+        }
+
+        .btn-delete-res:hover {
+            transform: scale(1.2);
+            color: #bd2130;
+        }
+    </style>
+</head>
+
+<body>
+
+    <!-- LOGIN SECTION -->
+    <div class="admin-container" id="loginSection">
+        <div class="login-card">
+            <div class="text-center mb-4">
+                <img src="imagenes/tienda_png/HARMELYS AZUL.png" alt="Harmèlys" height="80" class="mb-3">
+                <h1 class="h3 mb-3" style="color: var(--color-primario);">Acceso
+                    Admin</h1>
+                <p class="text-muted small">Panel de gestión de productos</p>
+            </div>
+
+            <form id="loginForm">
+                <div class="mb-3">
+                    <label for="username" class="form-label small-caps">Usuario</label>
+                    <input type="text" class="form-control" id="username" required placeholder="Ingrese usuario" />
+                </div>
+                <div class="mb-4">
+                    <label for="password" class="form-label small-caps">Contraseña</label>
+                    <input type="password" class="form-control" id="password" required
+                        placeholder="Ingrese contraseña" />
+                </div>
+                <button type="submit" class="btn btn-primary-custom w-100">Entrar</button>
+                <p class="text-danger mt-3 text-center d-none" id="loginError">Credenciales incorrectas</p>
+            </form>
+        </div>
+    </div>
+
+    <!-- DASHBOARD SECTION -->
+    <div class="container dashboard-container" id="dashboardSection">
+        <div class="dashboard-header">
+            <div class="d-flex align-items-center gap-3">
+                <img src="imagenes/tienda_png/HARMELYS AZUL.png" alt="Harmèlys" height="50">
+                <h2 class="mb-0">Gestión de Tienda</h2>
+            </div>
+
+            <!-- Botones eliminados de aquí -->
+            <button class="btn btn-outline-danger btn-sm" id="logoutBtn">Cerrar Sesión</button>
+        </div>
+
+        <!-- TABS SUPERIORES (Fuera del header, alineados a la izquierda) -->
+        <div class="d-flex justify-content-start mb-4 ps-1">
+            <div class="admin-tabs-container">
+                <button type="button" class="admin-tab-btn active" id="viewInventoryBtn"
+                    onclick="switchView('inventory')">INVENTARIO</button>
+                <button type="button" class="admin-tab-btn" id="viewReservationsBtn"
+                    onclick="switchView('reservations')">RESERVAS</button>
+            </div>
+        </div>
+
+        <!-- SECCION INVENTARIO (Visible por default) -->
+        <div id="inventorySection" class="row g-5">
+            <!-- GESTIÓN DE CATEGORÍAS -->
+            <div class="col-lg-3">
+                <div class="feature-card h-auto">
+                    <h3 class="h5 mb-4 small-caps" style="color: var(--color-primario);">Gestión Categorías</h3>
+
+                    <ul class="nav nav-tabs mb-3" id="catTabs" role="tablist">
+                        <li class="nav-item" role="presentation">
+                            <button class="nav-link active" id="types-tab" data-bs-toggle="tab" data-bs-target="#types"
+                                type="button" role="tab">Tipos</button>
+                        </li>
+                        <li class="nav-item" role="presentation">
+                            <button class="nav-link" id="specialties-tab" data-bs-toggle="tab"
+                                data-bs-target="#specialties" type="button" role="tab">Especialidades</button>
+                        </li>
+                    </ul>
+
+                    <div class="tab-content" id="catTabsContent">
+                        <!-- TIPOS -->
+                        <div class="tab-pane fade show active" id="types" role="tabpanel">
+                            <form id="addTypeForm" class="d-flex gap-2 mb-3">
+                                <input type="text" class="form-control form-control-sm" placeholder="Nuevo Tipo"
+                                    required>
+                                <button type="submit" class="btn btn-sm btn-primary-custom">+</button>
+                            </form>
+                            <ul class="list-group list-group-flush small" id="typesList"
+                                style="max-height: 200px; overflow-y: auto;">
+                                <!-- Lista dinámica -->
+                            </ul>
+                        </div>
+                        <!-- ESPECIALIDADES -->
+                        <div class="tab-pane fade" id="specialties" role="tabpanel">
+                            <form id="addSpecialtyForm" class="d-flex gap-2 mb-3">
+                                <input type="text" class="form-control form-control-sm" placeholder="Nueva Especialidad"
+                                    required>
+                                <button type="submit" class="btn btn-sm btn-primary-custom">+</button>
+                            </form>
+                            <ul class="list-group list-group-flush small" id="specialtiesList"
+                                style="max-height: 200px; overflow-y: auto;">
+                                <!-- Lista dinámica -->
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- FORMULARIO AGREGAR PRODUCTO -->
+            <div class="col-lg-4">
+                <div class="feature-card h-auto">
+                    <h3 class="h5 mb-4 small-caps" style="color: var(--color-primario);">Nuevo Producto</h3>
+                    <form id="addProductForm">
+                        <div class="mb-3">
+                            <label for="prodName" class="form-label">Nombre del Producto</label>
+                            <input type="text" class="form-control" id="prodName" required />
+                        </div>
+
+                        <div class="mb-3">
+                            <label for="prodDesc" class="form-label">Descripción</label>
+                            <textarea class="form-control" id="prodDesc" rows="2" required></textarea>
+                        </div>
+
+                        <div class="mb-3">
+                            <label for="prodType" class="form-label">Tipo</label>
+                            <select class="form-select" id="prodType" required>
+                                <option value="" disabled selected>Selecciona un tipo...</option>
+                                <!-- Dinámico -->
+                            </select>
+                        </div>
+
+                        <div class="mb-3">
+                            <label for="prodSpecial" class="form-label">Especialidad</label>
+                            <select class="form-select" id="prodSpecial">
+                                <option value="no">Ninguna</option>
+                                <!-- Dinámico -->
+                            </select>
+                        </div>
+
+                        <div class="mb-3">
+                            <label for="prodPrice" class="form-label">Precio (€)</label>
+                            <input type="number" step="0.01" class="form-control" id="prodPrice" required />
+                        </div>
+
+                        <div class="mb-4">
+                            <label for="prodImage" class="form-label">URL de la imagen / Ruta local</label>
+                            <input type="text" class="form-control" id="prodImage"
+                                placeholder="https://... o imagenes/carpeta/foto.png" />
+                            <div class="form-text text-muted">Pega aquí el enlace de Imgur o la ruta relativa si está en
+                                el servidor.</div>
+                        </div>
+
+                        <!-- Campo límite de compra (solo visible si tipo = Reservas) -->
+                        <div class="mb-4" id="limitCompraField" style="display: none;">
+                            <label for="prodLimit" class="form-label">Límite de compra <span
+                                    class="text-muted small">(uds. por pedido)</span></label>
+                            <input type="number" min="1" step="1" class="form-control" id="prodLimit"
+                                placeholder="Ej: 3" />
+                            <div class="form-text text-muted">Máximo de unidades que un cliente puede reservar por
+                                pedido.</div>
+                        </div>
+
+                        <button type="submit" class="btn btn-primary-custom w-100">Agregar Producto</button>
+                    </form>
+                </div>
+            </div>
+
+            <!-- LISTADO PRODUCTOS -->
+            <div class="col-lg-5">
+                <div class="d-flex justify-content-end align-items-center mb-3">
+                    <!-- Título inventario eliminado -->
+                    <!-- FILTROS -->
+                    <div class="d-flex gap-2">
+                        <select id="filterType" class="form-select form-select-sm" style="width: auto;"
+                            onchange="renderProducts()">
+                            <option value="all">Todos los Tipos</option>
+                            <!-- Dinámico -->
+                        </select>
+                        <select id="filterSpecial" class="form-select form-select-sm" style="width: auto;"
+                            onchange="renderProducts()">
+                            <option value="all">Todas Esp.</option>
+                            <!-- Dinámico -->
+                        </select>
+                    </div>
+                </div>
+                <ul class="list-group list-group-flush" id="productList">
+                    <!-- Items dinámicos -->
+                </ul>
+                <div class="mt-4 p-3 bg-soft rounded text-center text-muted small">
+                    Los cambios se guardan en la base de datos de MongoDB.
+                </div>
+            </div>
+        </div>
+        <!-- FIN SECCION INVENTARIO -->
+
+        <!-- SECCION RESERVAS (Oculta por default) -->
+        <div id="reservationsSection" class="row g-5 d-none">
+            <div class="col-12">
+                <div class="reservations-wrapper">
+                    <!-- Custom Subtabs -->
+                    <div class="admin-subtabs-container">
+                        <button class="admin-subtab-btn active" id="pending-tab"
+                            onclick="switchSubTab('pending')">Pendientes</button>
+                        <button class="admin-subtab-btn" id="completed-tab"
+                            onclick="switchSubTab('completed')">Completadas</button>
+                    </div>
+
+                    <div id="pendingSection">
+                        <div class="row" id="pendingList">
+                            <!-- Cards dinámicas -->
+                        </div>
+                    </div>
+
+                    <div id="completedSection" class="d-none">
+                        <div class="d-flex justify-content-end mb-3">
+                            <button class="btn btn-sm btn-outline-primary" onclick="toggleSortOrder()"
+                                id="sortToggleBtn">
+                                ⬇️ Fecha: Más reciente primero
+                            </button>
+                        </div>
+                        <div class="row" id="completedList">
+                            <!-- Cards dinámicas -->
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- MODAL DETALLE RESERVA -->
+        <div class="modal fade" id="reservationModal" tabindex="-1" aria-hidden="true">
+            <div class="modal-dialog modal-lg">
+                <div class="modal-content" style="background-color: var(--color-crema);">
+                    <div class="modal-header border-0">
+                        <h5 class="modal-title" style="color: var(--color-primario);">Detalle Reserva</h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+                    <div class="modal-body">
+                        <div class="row">
+                            <div class="col-md-6 mb-3">
+                                <h6 class="text-uppercase text-muted small">Cliente</h6>
+                                <p class="fw-bold mb-1" id="modalClientName">-</p>
+                                <p class="mb-1" id="modalClientEmail">-</p>
+                                <p class="mb-0" id="modalClientPhone">-</p>
+                            </div>
+                            <div class="col-md-6 mb-3 text-md-end">
+                                <h6 class="text-uppercase text-muted small">Datos Reserva</h6>
+                                <p class="mb-1"><strong>Recogida:</strong> <span id="modalDate">-</span></p>
+                                <p class="mb-0"><strong>Estado:</strong> <span class="badge bg-warning"
+                                        id="modalStatus">Pendiente</span></p>
+                            </div>
+                        </div>
+                        <hr>
+                        <h6 class="text-uppercase text-muted small mb-3">Productos</h6>
+                        <ul class="list-group list-group-flush mb-3" id="modalItemsList"
+                            style="background: transparent;">
+                            <!-- Items -->
+                        </ul>
+                        <div class="d-flex justify-content-end align-items-center">
+                            <span class="h5 mb-0 me-3">Total:</span>
+                            <span class="h4 mb-0 fw-bold text-primary" id="modalTotal">0.00 €</span>
+                        </div>
+                    </div>
+                    <div class="modal-footer border-0">
+                        <button type="button" class="btn btn-outline-secondary" data-bs-dismiss="modal">Cerrar</button>
+                        <button type="button" class="btn btn-success" id="btnCompleteReservation">Completar
+                            Reserva</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+    <script>
+        // URL BACKEND
+        // URL BACKEND (Dinámica para Local/Red/Prod)
+        const getApiUrl = () => {
+            const host = window.location.hostname;
+            if (host === 'localhost' || host === '127.0.0.1') {
+                return 'http://localhost:3000/api';
+            } else if (host.startsWith('192.') || host.startsWith('172.') || host.startsWith('10.')) {
+                // Red local: Usar la misma IP del cliente (asumiendo que el server corre ahí o configurar manualmente)
+                // Para simplificar en desarrollo móvil, usameos la IP fija detectada o window.location.hostname si se sirve desde ahí
+                return `http://${host}:3000/api`;
+            } else {
+                // Producción (Hostinger u otros)
+                return '/api'; // O la URL completa de producción si es diferente dominio
+            }
+        };
+        const API_URL = getApiUrl();
+
+
+        // ELEMENTOS DOM
+        const loginSection = document.getElementById("loginSection");
+        const dashboardSection = document.getElementById("dashboardSection");
+        const loginForm = document.getElementById("loginForm");
+        const loginError = document.getElementById("loginError");
+        const logoutBtn = document.getElementById("logoutBtn");
+        const addProductForm = document.getElementById("addProductForm");
+        const productList = document.getElementById("productList");
+        const formTitle = document.querySelector("#addProductForm").closest(".feature-card").querySelector("h3");
+        const submitBtn = addProductForm.querySelector("button[type='submit']");
+
+        // Categorias UI
+        const addTypeForm = document.getElementById("addTypeForm");
+        const addSpecialtyForm = document.getElementById("addSpecialtyForm");
+        const typesList = document.getElementById("typesList");
+        const specialtiesList = document.getElementById("specialtiesList");
+        const prodTypeSelect = document.getElementById("prodType");
+        const prodSpecialSelect = document.getElementById("prodSpecial");
+
+        // Filtros UI
+        const filterType = document.getElementById("filterType");
+        const filterSpecial = document.getElementById("filterSpecial");
+
+        // ESTADO
+        let products = [];
+        let categories = []; // { _id, name, kind }
+        let isEditing = false;
+        let editingId = null;
+
+        // INICIALIZACIÓN
+        function init() {
+            // Verificar Sesión (Token JWT)
+            const token = localStorage.getItem("adminToken");
+            if (token) {
+                showDashboard();
+                showDashboard();
+                fetchCategories(); // Cargar categorías primero
+                fetchProducts();
+            } else {
+                showLogin();
+            }
+        }
+
+        // NAVEGACIÓN
+        function showLogin() {
+            loginSection.style.display = "flex";
+            dashboardSection.style.display = "none";
+            document.body.style.paddingTop = "0";
+        }
+
+        function showDashboard() {
+            loginSection.style.display = "none";
+            dashboardSection.style.display = "block";
+            document.body.style.paddingTop = "40px";
+            fetchCategories(); // Ensure categories are loaded when dashboard is shown
+        }
+
+        // LOGIN LOGIC (SECURE FETCH)
+        loginForm.addEventListener("submit", async (e) => {
+            e.preventDefault();
+            const user = document.getElementById("username").value;
+            const pass = document.getElementById("password").value;
+            const btn = loginForm.querySelector("button");
+
+            // UI Loading
+            btn.disabled = true;
+            btn.textContent = "Verificando...";
+            loginError.classList.add("d-none");
+
+            try {
+                const response = await fetch(`${API_URL}/login`, {
+                    method: "POST",
+                    headers: { "Content-Type": "application/json" },
+                    body: JSON.stringify({ username: user, password: pass })
+                });
+
+                const data = await response.json();
+
+                if (response.ok) {
+                    // Guardar token
+                    localStorage.setItem("adminToken", data.token);
+                    localStorage.setItem("adminUser", data.user.username);
+                    showDashboard();
+                    fetchCategories();
+                    fetchProducts();
+                } else {
+                    // Error
+                    loginError.textContent = data.error || "Error al iniciar sesión";
+                    loginError.classList.remove("d-none");
+                }
+            } catch (err) {
+                loginError.textContent = "Error de conexión con el servidor";
+                loginError.classList.remove("d-none");
+            } finally {
+                btn.disabled = false;
+                btn.textContent = "Entrar";
+            }
+        });
+
+        // LOGOUT
+        logoutBtn.addEventListener("click", () => {
+            localStorage.removeItem("adminToken");
+            localStorage.removeItem("adminUser");
+            showLogin();
+        });
+
+        // OBTENER PRODUCTOS (GET)
+        async function fetchProducts() {
+            try {
+                const response = await fetch(`${API_URL}/products`);
+                if (response.ok) {
+                    products = await response.json();
+                    renderProducts();
+                } else {
+                    console.error("Error al obtener productos");
+                }
+            } catch (err) {
+                console.error("Error de red:", err);
+            }
+        }
+
+        // RENDER PRODUCTOS
+        function renderProducts() {
+            const fType = filterType.value;
+            const fSpecial = filterSpecial.value;
+
+            productList.innerHTML = "";
+
+            const filtered = products.filter(p => {
+                const matchType = fType === "all" || p.tipo === fType;
+                const matchSpecial = fSpecial === "all" || (fSpecial === "no" && p.categoria_especial === "no") || p.categoria_especial === fSpecial;
+                return matchType && matchSpecial;
+            });
+
+            if (filtered.length === 0) {
+                productList.innerHTML = '<div class="text-muted small text-center py-4">No hay productos que coincidan.</div>';
+                return;
+            }
+
+            filtered.forEach(p => {
+                // Fallback imagen y mapeo de campos al formato del modelo
+                const thumbSrc = p.imagen_url || "imagenes/tienda_productos/producto_tienda_generico.png";
+
+                // Mapeo de display
+                const displayName = p.nombre;
+                const displayType = p.tipo;
+                const displayDesc = p.descripcion;
+                const displayPrice = p.precio;
+
+                const li = document.createElement("li");
+                li.className = "list-group-item";
+                li.innerHTML = `
+          <div class="d-flex align-items-center">
+            <img src="${thumbSrc}" class="product-thumb" alt="${displayName}">
+            <div>
+              <div class="fw-bold">${displayName}</div>
+              <div class="small text-muted text-uppercase" style="font-size: 0.75rem;">${displayType}</div>
+              <div class="small text-muted text-truncate" style="max-width: 150px;">${displayDesc}</div>
+            </div>
+          </div>
+          <div class="d-flex align-items-center gap-2">
+            <span class="fw-bold text-primary">${displayPrice.toFixed(2)} €</span>
+            <button class="btn btn-sm btn-outline-primary" style="font-size: 0.8rem;" onclick="startEdit('${p._id}')">Editar</button>
+            <button class="btn-delete" onclick="removeProduct('${p._id}')">Eliminar</button>
+          </div>
+        `;
+                productList.appendChild(li);
+            });
+        }
+
+        // AGREGAR / EDITAR PRODUCTO
+        addProductForm.addEventListener("submit", async (e) => {
+            e.preventDefault();
+
+            const name = document.getElementById("prodName").value;
+            const desc = document.getElementById("prodDesc").value;
+            const type = document.getElementById("prodType").value;
+            const special = document.getElementById("prodSpecial").value || "no";
+            const price = parseFloat(document.getElementById("prodPrice").value);
+            const imageUrl = document.getElementById("prodImage").value;
+            const limitVal = document.getElementById("prodLimit").value;
+
+            const productData = {
+                nombre: name,
+                descripcion: desc,
+                tipo: type,
+                categoria_especial: special,
+                precio: price,
+                imagen_url: imageUrl.replace(/\\/g, "/"), // Normalizar ruta (Windows -> Web)
+                limite_compra: (type.toLowerCase() === 'reservas' && limitVal) ? parseInt(limitVal) : null
+            };
+
+            await sendProductData(productData);
+        });
+
+        // Mostrar/ocultar campo límite de compra al cambiar el tipo
+        prodTypeSelect.addEventListener('change', () => {
+            const limitField = document.getElementById('limitCompraField');
+            if (prodTypeSelect.value.toLowerCase() === 'reservas') {
+                limitField.style.display = 'block';
+            } else {
+                limitField.style.display = 'none';
+                document.getElementById('prodLimit').value = '';
+            }
+        });
+
+        async function sendProductData(data) {
+            const url = isEditing ? `${API_URL}/products/${editingId}` : `${API_URL}/products`;
+            const method = isEditing ? "PUT" : "POST";
+            const token = localStorage.getItem("adminToken");
+
+            try {
+                const response = await fetch(url, {
+                    method: method,
+                    headers: {
+                        "Content-Type": "application/json",
+                        "Authorization": `Bearer ${token}`
+                    },
+                    body: JSON.stringify(data)
+                });
+
+                if (response.ok) {
+                    alert(isEditing ? "Producto actualizado" : "Producto agregado");
+                    resetForm();
+                    fetchProducts();
+                } else if (response.status === 401 || response.status === 403) {
+                    alert("Sesión expirada. Por favor, inicia sesión nuevamente.");
+                    logoutBtn.click();
+                } else {
+                    const err = await response.json();
+                    alert("Error: " + (err.error || "No se pudo guardar"));
+                }
+            } catch (error) {
+                console.error(error);
+                alert("Error de conexión");
+            }
+        }
+
+        // OBTENER CATEGORIAS
+        async function fetchCategories() {
+            try {
+                const response = await fetch(`${API_URL}/categories`);
+                if (response.ok) {
+                    categories = await response.json();
+                    renderCategories();
+                }
+            } catch (err) {
+                console.error("Error categories:", err);
+            }
+        }
+
+        // RENDER CATEGORIAS Y DROPDOWNS
+        function renderCategories() {
+            // Listas gestión
+            typesList.innerHTML = "";
+            specialtiesList.innerHTML = "";
+
+            // Dropdowns formulario
+            prodTypeSelect.innerHTML = '<option value="" disabled selected>Selecciona un tipo...</option>';
+            prodSpecialSelect.innerHTML = '<option value="no">Ninguna</option>';
+
+            // Dropdowns Filtros
+            const currentFilterType = filterType.value;
+            const currentFilterSpecial = filterSpecial.value;
+
+            filterType.innerHTML = '<option value="all">Todos los Tipos</option>';
+            filterSpecial.innerHTML = '<option value="all">Todas Esp.</option>';
+
+            categories.forEach(cat => {
+                // UI Gestión
+                const li = document.createElement("li");
+                li.className = "list-group-item d-flex justify-content-between align-items-center p-2";
+                li.innerHTML = `
+                    <span>${cat.name}</span>
+                    <button class="btn btn-sm btn-outline-danger py-0 px-1" style="font-size: 0.7rem" onclick="deleteCategory('${cat._id}')">×</button>
+                `;
+
+                // UI Dropdown Form
+                const option = document.createElement("option");
+                option.value = cat.name;
+                option.textContent = cat.name;
+
+                // UI Dropdown Filter
+                const filterOption = document.createElement("option");
+                filterOption.value = cat.name;
+                filterOption.textContent = cat.name;
+
+                if (cat.kind === 'type') {
+                    typesList.appendChild(li);
+                    prodTypeSelect.appendChild(option);
+                    filterType.appendChild(filterOption);
+                } else if (cat.kind === 'specialty') {
+                    specialtiesList.appendChild(li);
+                    prodSpecialSelect.appendChild(option);
+                    filterSpecial.appendChild(filterOption);
+                }
+            });
+
+            // Restore filter selection
+            filterType.value = currentFilterType;
+            filterSpecial.value = currentFilterSpecial;
+        }
+
+        // AGREGAR CATEGORIA
+        async function addCategory(name, kind) {
+            const token = localStorage.getItem("adminToken");
+            try {
+                const response = await fetch(`${API_URL}/categories`, {
+                    method: "POST",
+                    headers: {
+                        "Content-Type": "application/json",
+                        "Authorization": `Bearer ${token}`
+                    },
+                    body: JSON.stringify({ name, kind })
+                });
+                if (response.ok) {
+                    fetchCategories();
+                } else if (response.status === 401 || response.status === 403) {
+                    alert("Sesión expirada");
+                    logoutBtn.click();
+                } else {
+                    const err = await response.json();
+                    alert("Error: " + (err.error || "No se pudo crear"));
+                }
+            } catch (err) {
+                console.error(err);
+            }
+        }
+
+        addTypeForm.addEventListener("submit", (e) => {
+            e.preventDefault();
+            const input = addTypeForm.querySelector("input");
+            addCategory(input.value, 'type');
+            input.value = "";
+        });
+
+        addSpecialtyForm.addEventListener("submit", (e) => {
+            e.preventDefault();
+            const input = addSpecialtyForm.querySelector("input");
+            addCategory(input.value, 'specialty');
+            input.value = "";
+        });
+
+        // BORRAR CATEGORIA
+        window.deleteCategory = async function (id) {
+            if (!confirm("¿Borrar categoría? Se mantendrá en productos antiguos pero no podrás crear nuevos con ella.")) return;
+            const token = localStorage.getItem("adminToken");
+            try {
+                const response = await fetch(`${API_URL}/categories/${id}`, {
+                    method: "DELETE",
+                    headers: { "Authorization": `Bearer ${token}` }
+                });
+                if (response.ok) {
+                    fetchCategories();
+                } else if (response.status === 401 || response.status === 403) {
+                    alert("Sesión expirada");
+                    logoutBtn.click();
+                }
+            } catch (err) {
+                console.error(err);
+            }
+        };
+
+        // EDITAR UI
+        window.startEdit = function (id) {
+            const product = products.find(p => p._id === id);
+            if (!product) return;
+
+            isEditing = true;
+            editingId = id;
+
+            // Rellenar form
+            document.getElementById("prodName").value = product.nombre;
+            document.getElementById("prodDesc").value = product.descripcion;
+            document.getElementById("prodPrice").value = product.precio;
+            document.getElementById("prodImage").value = product.imagen_url || "";
+
+            prodTypeSelect.value = product.tipo;
+            prodSpecialSelect.value = product.categoria_especial === 'no' ? 'no' : product.categoria_especial;
+
+            // Mostrar/ocultar campo límite de compra y rellenar si existe
+            const limitField = document.getElementById('limitCompraField');
+            const limitInput = document.getElementById('prodLimit');
+            if (product.tipo && product.tipo.toLowerCase() === 'reservas') {
+                limitField.style.display = 'block';
+                limitInput.value = product.limite_compra ?? '';
+            } else {
+                limitField.style.display = 'none';
+                limitInput.value = '';
+            }
+
+            // Cambiar textos UI
+            formTitle.textContent = "Editar Producto";
+            submitBtn.textContent = "Actualizar Producto";
+
+            // Añadir botón de cancelar si no existe
+            if (!document.getElementById("cancelEditBtn")) {
+                const cancelBtn = document.createElement("button");
+                cancelBtn.type = "button";
+                cancelBtn.id = "cancelEditBtn";
+                cancelBtn.className = "btn btn-outline-secondary w-100 mt-2";
+                cancelBtn.textContent = "Cancelar Edición";
+                cancelBtn.onclick = resetForm;
+                addProductForm.appendChild(cancelBtn);
+            }
+        };
+
+        function resetForm() {
+            addProductForm.reset();
+            isEditing = false;
+            editingId = null;
+            formTitle.textContent = "Nuevo Producto";
+            submitBtn.textContent = "Agregar Producto";
+            // Ocultar campo límite al resetear
+            document.getElementById('limitCompraField').style.display = 'none';
+            document.getElementById('prodLimit').value = '';
+            const cancelBtn = document.getElementById("cancelEditBtn");
+            if (cancelBtn) cancelBtn.remove();
+        }
+
+        // ELIMINAR PRODUCTO
+        window.removeProduct = async function (id) {
+            if (confirm("¿Seguro que deseas eliminar este producto de la base de datos?")) {
+                const token = localStorage.getItem("adminToken");
+                try {
+                    const response = await fetch(`${API_URL}/products/${id}`, {
+                        method: "DELETE",
+                        headers: { "Authorization": `Bearer ${token}` }
+                    });
+                    if (response.ok) {
+                        fetchProducts();
+                    } else if (response.status === 401 || response.status === 403) {
+                        alert("Sesión expirada");
+                        logoutBtn.click();
+                    } else {
+                        alert("Error al eliminar");
+                    }
+                } catch (err) {
+                    alert("Error de conexión");
+                }
+            }
+        };
+
+        // ==========================================
+        //  GESTIÓN DE VISTAS Y RESERVAS
+        // ==========================================
+        const inventorySection = document.getElementById("inventorySection");
+        const reservationsSection = document.getElementById("reservationsSection");
+        const viewInventoryBtn = document.getElementById("viewInventoryBtn");
+        const viewReservationsBtn = document.getElementById("viewReservationsBtn");
+
+        function switchView(view) {
+            if (view === 'inventory') {
+                inventorySection.classList.remove('d-none');
+                reservationsSection.classList.add('d-none');
+
+                viewInventoryBtn.classList.add('active');
+                viewReservationsBtn.classList.remove('active');
+            } else {
+                inventorySection.classList.add('d-none');
+                reservationsSection.classList.remove('d-none');
+
+                viewInventoryBtn.classList.remove('active');
+                viewReservationsBtn.classList.add('active');
+
+                // Recargar siempre al cambiar
+                fetchReservations();
+            }
+        }
+
+        // Subtabs Logic
+        const pendingTab = document.getElementById("pending-tab");
+        const completedTab = document.getElementById("completed-tab");
+        const pendingSection = document.getElementById("pendingSection");
+        const completedSection = document.getElementById("completedSection");
+
+        window.switchSubTab = function (tab) {
+            if (tab === 'pending') {
+                pendingTab.classList.add('active');
+                completedTab.classList.remove('active');
+                pendingSection.classList.remove('d-none');
+                completedSection.classList.add('d-none');
+            } else {
+                pendingTab.classList.remove('active');
+                completedTab.classList.add('active');
+                pendingSection.classList.add('d-none');
+                completedSection.classList.remove('d-none');
+            }
+        };
+
+        let allReservations = [];
+        let sortCompletedAsc = true; // false = descendente (más reciente primero)
+
+        window.toggleSortOrder = function () {
+            sortCompletedAsc = !sortCompletedAsc;
+            const btn = document.getElementById("sortToggleBtn");
+            btn.textContent = sortCompletedAsc ? "⬆️ Fecha: Más antigua primero" : "⬇️ Fecha: Más reciente primero";
+            renderReservations();
+        };
+
+        async function fetchReservations() {
+            const token = localStorage.getItem("adminToken");
+            try {
+                const response = await fetch(`${API_URL}/reservations`, {
+                    headers: { "Authorization": `Bearer ${token}` }
+                });
+                if (response.ok) {
+                    allReservations = await response.json();
+                    renderReservations();
+                } else if (response.status === 401) {
+                    logoutBtn.click();
+                }
+            } catch (err) {
+                console.error("Error fetching reservations", err);
+            }
+        }
+
+        function renderReservations() {
+            const pendingContainer = document.getElementById("pendingList");
+            const completedContainer = document.getElementById("completedList");
+
+            pendingContainer.innerHTML = "";
+            completedContainer.innerHTML = "";
+
+            // Separar
+            let pending = allReservations.filter(r => r.estado !== 'finalizado');
+            let completed = allReservations.filter(r => r.estado === 'finalizado');
+
+            // Ordenar: Pendientes siempre Ascendente (próximos a vencer arriba)
+            pending.sort((a, b) => new Date(a.fecha_recogida) - new Date(b.fecha_recogida));
+
+            // Ordenar: Completadas según toggle
+            completed.sort((a, b) => {
+                const dateA = new Date(a.fecha_recogida);
+                const dateB = new Date(b.fecha_recogida);
+                return sortCompletedAsc ? (dateA - dateB) : (dateB - dateA);
+            });
+
+            const createCard = (res) => {
+                const dateObj = new Date(res.fecha_recogida);
+                const dateStr = dateObj.toLocaleDateString();
+                const isCompleted = res.estado === 'finalizado';
+                const statusColor = isCompleted ? 'bg-success' : 'bg-warning text-dark';
+
+                // Si es completada, añadimos botón de borrar
+                const deleteBtnHtml = isCompleted
+                    ? `<button class="btn-delete-res" onclick="event.stopPropagation(); deleteReservation('${res._id}')" title="Eliminar Reserva">🗑️</button>`
+                    : '';
+
+                // Usamos data-id para event delegation
+                return `
+                    <div class="col-md-4 mb-3">
+                        <div class="card h-100 shadow-sm border-0 reservation-card" 
+                             data-id="${res._id}"
+                             style="background-color: #fff; cursor: pointer; transition: transform 0.2s;" 
+                             onmouseover="this.style.transform='translateY(-3px)'" 
+                             onmouseout="this.style.transform='translateY(0)'">
+                            <div class="card-body">
+                                <div class="d-flex justify-content-between align-items-start mb-2">
+                                    <h5 class="card-title h6 fw-bold text-primary mb-0">${res.nombre_cliente}</h5>
+                                    <span class="badge ${statusColor}">${res.estado}</span>
+                                </div>
+                                <p class="card-text small text-muted mb-1">📅 ${dateStr}</p>
+                                <p class="card-text small text-muted">🛒 ${res.items.length} items - <strong>${res.total_reserva.toFixed(2)} €</strong></p>
+                                ${deleteBtnHtml}
+                            </div>
+                        </div>
+                    </div>
+                `;
+            };
+
+            pendingContainer.innerHTML = pending.map(createCard).join('');
+            completedContainer.innerHTML = completed.map(createCard).join('');
+
+            // Agregar listeners manualmente
+            document.querySelectorAll('.reservation-card').forEach(card => {
+                card.addEventListener('click', function () {
+                    const id = this.getAttribute('data-id');
+                    openReservationDetail(id);
+                });
+            });
+
+            if (pendingContainer.innerHTML === "") pendingContainer.innerHTML = '<div class="col-12 text-muted text-center py-4">No hay reservas pendientes.</div>';
+            if (completedContainer.innerHTML === "") completedContainer.innerHTML = '<div class="col-12 text-muted text-center py-4">No hay reservas completadas.</div>';
+        }
+
+        // MODAL RESERVAS
+        const reservationModal = new bootstrap.Modal(document.getElementById('reservationModal'));
+        let currentResId = null;
+
+        function openReservationDetail(id) {
+            console.log("Opening reservation:", id);
+            const res = allReservations.find(r => r._id === id);
+            if (!res) {
+                console.error("Reservation not found for ID:", id);
+                return;
+            }
+
+            currentResId = id;
+            document.getElementById("modalClientName").textContent = res.nombre_cliente;
+            document.getElementById("modalClientEmail").textContent = res.email_cliente;
+            document.getElementById("modalClientPhone").textContent = res.telefono_cliente;
+            document.getElementById("modalDate").textContent = new Date(res.fecha_recogida).toLocaleDateString();
+            document.getElementById("modalStatus").textContent = res.estado.toUpperCase();
+            document.getElementById("modalTotal").textContent = res.total_reserva.toFixed(2) + " €";
+
+            const itemsList = document.getElementById("modalItemsList");
+            itemsList.innerHTML = "";
+            res.items.forEach(item => {
+                const li = document.createElement("li");
+                li.className = "list-group-item d-flex justify-content-between align-items-center px-0 bg-transparent";
+                li.innerHTML = `
+                    <span>${item.cantidad}x ${item.nombre_producto}</span>
+                    <span>${(item.precio_unitario * item.cantidad).toFixed(2)} €</span>
+                `;
+                itemsList.appendChild(li);
+            });
+
+            const btnComplete = document.getElementById("btnCompleteReservation");
+            if (res.estado === 'finalizado') {
+                btnComplete.style.display = 'none';
+            } else {
+                btnComplete.style.display = 'block';
+            }
+
+            reservationModal.show();
+        };
+
+        document.getElementById("btnCompleteReservation").addEventListener("click", async () => {
+            if (!currentResId) return;
+            const token = localStorage.getItem("adminToken");
+
+            try {
+                const response = await fetch(`${API_URL}/reservations/${currentResId}/status`, {
+                    method: 'PATCH',
+                    headers: {
+                        "Content-Type": "application/json",
+                        "Authorization": `Bearer ${token}`
+                    },
+                    body: JSON.stringify({ estado: 'finalizado' })
+                });
+
+                if (response.ok) {
+                    reservationModal.hide();
+                    fetchReservations(); // Recargar listas
+                } else {
+                    alert("Error al actualizar la reserva");
+                }
+            } catch (error) {
+                console.error(error);
+                alert("Error de conexión");
+            }
+        });
+
+        // ELIMINAR RESERVA
+        window.deleteReservation = async function (id) {
+            if (confirm("¿Estás seguro de que quieres eliminar esta reserva permanentemente? Esta acción no se puede deshacer.")) {
+                const token = localStorage.getItem("adminToken");
+                try {
+                    const response = await fetch(`${API_URL}/reservations/${id}`, {
+                        method: 'DELETE',
+                        headers: { "Authorization": `Bearer ${token}` }
+                    });
+
+                    if (response.ok) {
+                        fetchReservations(); // Recargar
+                    } else {
+                        alert("Error al eliminar la reserva");
+                    }
+                } catch (error) {
+                    console.error(error);
+                    alert("Error de conexión al eliminar");
+                }
+            }
+        };
+
+        // ARRANQUE
+        init();
+
+    </script>
+
+</body>
+
+</html>

@@ -1,0 +1,8 @@
+.contenedor{
+    float:left;
+    width:600px;
+    height: 500px;
+    border:1px solid #333;
+    border-radius: 0px 7px 7px 7px;
+    background: linear-gradient(#FFFFFF,#CCCCCC);
+}

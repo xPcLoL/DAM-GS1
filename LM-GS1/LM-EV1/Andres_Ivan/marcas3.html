@@ -1,0 +1,52 @@
+<html>
+    <head>
+        <title>Ejercicio 3</title>
+        <style type="text/css">
+            .clase1{
+                color: black;
+                width: 100;
+                background-color: white;
+                border-width: 1;
+                border-color: gray;
+                border-style: groove;
+                width: 100;
+                height: 100;
+            }
+            .clase2{
+               color: black;
+                width: 100;
+                background-color: white;
+                border-width: 1;
+                border-color: gray;
+                border-style: groove;
+                width: 300;
+                height: 300;
+            }
+        </style>
+        <script language="JavaScript">
+            function cambiar(){
+                event.srcElement.className="clase2"
+                unico.innerHTML="Cuidado, la caja esta activada"
+            }
+            function cambiar2(){
+                event.srcElement.className="clase1"
+                unico.innerHTML="Pasa el raton por encima"
+            }
+            function revelacion(){
+                texto.style.visibility="visible"
+                octane.style.visibility="visible"
+                arduino.style.visibility="visible"
+
+            }
+        </script>
+    </head>
+    <body>
+        <h1>La caja misteriosa interactiva</h1>
+        <div id="unico"  class="clase1" onmouseover="cambiar()" onmouseout="cambiar2()" onclick="revelacion()">
+            Pasa el raton por encima
+        </div>
+        <h2 id="texto" style="visibility: hidden;">Enhorabuena, has abierto la caja misteriosa</h2>
+        <img id="octane"src="octane.jfif" width="100" height="100" style="left: 200; visibility: hidden;">
+        <img id="arduino"src="Arduino_Uno_-_R3.jpg" width="100" height="100" style="left: 400; visibility: hidden;">
+    </body>
+</html>

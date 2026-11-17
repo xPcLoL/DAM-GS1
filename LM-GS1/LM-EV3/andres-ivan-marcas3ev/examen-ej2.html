@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Ejercicio2 y 3</title>
+    <script>
+        document.addEventListener('DOMContentLoaded', function(){
+            var lista = document.getElementById('productosList');
+
+            var request = window.indexedDB.open('tienda', 1);
+
+            request.onupgradeneeded = function(event) {
+                var db = event.target.result;
+                if (!db.objectStoreNames.contains('productos')) {
+                    db.createObjectStore('productos', { keyPath: 'id' });
+                }
+            };
+
+            request.onsuccess = function(event){
+                var db = event.target.result;
+                var transaction = db.transaction(['productos'], 'readonly');
+                var store = transaction.objectStore('productos');
+                var cursorRequest = store.openCursor();
+
+                cursorRequest.onsuccess = function(event){
+                    var cursor = event.target.result;
+                    if(cursor){
+                        var li = document.createElement('li');
+                        li.innerHTML = `ID: ${cursor.value.id}, Nombre producto: ${cursor.value.nomProducto} <input type="button" value="comprar" onclick="almacenar('${cursor.value.nomProducto}')">`;
+                        lista.appendChild(li);
+                        
+                        cursor.continue(); 
+                    } else {
+                        console.log("No hay más registros.");
+                    }
+                };
+
+                cursorRequest.onerror = function(){
+                    console.log('Error al mostrar los productos');
+                };
+
+            }; 
+
+            mostrar();
+
+        });
+
+        function mostrar(){
+                cesta.innerHTML="";
+                if(sessionStorage.length == 0){
+                    cesta.innerHTML="<h5>No tienes productos en el carrito</h5>"
+                }else{
+                    cesta.innerHTML = "<table width=90%><tr><th>Producto</th><th>Unidades</th><th>Eliminar</th></tr></table>";
+                    for(i = 0; i < sessionStorage.length; i++)
+                        cesta.innerHTML += "<table width=90%><tr><td>" + sessionStorage.key(i) + "</td><td>" + sessionStorage.getItem(sessionStorage.key(i)) + "</td><td><input type=button value=Quitar onclick=eliminar('"+sessionStorage.key(i)+ "')></td></tr></table>";
+                }
+            }
+
+            function almacenar(codigo){
+                if(sessionStorage.getItem(codigo) == null){
+                    sessionStorage.setItem(codigo,1);
+
+                }else {
+                    sessionStorage.setItem(codigo, parseInt(sessionStorage.getItem(codigo))+1)
+                }
+                mostrar();
+            }
+            function eliminar(codigo){
+                if(sessionStorage.getItem(codigo) == 1){
+                    sessionStorage.removeItem(codigo);
+                    
+                }else{
+                    sessionStorage.setItem(codigo, parseInt(sessionStorage.getItem(codigo))-1)
+                }
+                mostrar();
+            }
+
+            function confirmarCompra(){
+                for(var i = 0; i < sessionStorage.length; i++){
+                    var clave = sessionStorage.key(i);
+                    var valor = sessionStorage.getItem(clave);
+                    document.cookie = clave + "=" + valor + "; max-age=3600; path=/";
+                }
+                sessionStorage.clear();
+                mostrar();
+            }
+    </script>
+</head>
+<body>
+    <h1>Productos</h1>
+    <ul id="productosList"></ul>
+    <div id="carrito">
+                <h4>Este es el carrito de la compra</h4>
+                <div id="cesta"></div>
+                <div id="total"></div>
+                <input type="button" value="Confirmar compra" onclick="confirmarCompra()">
+            </div>
+</body>
+</html>

@@ -1,0 +1,71 @@
+<html>
+    <head>
+         <title>Eventos en general</title>
+    <script type="text/javascript" src="jquery-3.7.1.min.js"></script>
+    <script language="JavaScript">
+        $(document).ready(function(){
+            $(document).on("mousemove", function(e){
+                $("#divCoordenadas").html("<strong>"+ e.pageX + "</strong> - <strong>" + e.pageY + "</strong>");
+            });
+            $(document).on("click",function(e){
+                $("#divEstado").html("<strong>Clic izquierdo</strong>");
+            });
+            $(document).on("contextmenu",function(e){
+                e.preventDefault();
+                $("#divEstado").html("<strong>Clic derecho</strong>");
+            });
+            $("#divScroll").on("scroll",function(e){
+                $("#divEstado").html("<strong>Scroll detectado</strong>");
+            });
+
+        });
+            
+    </script>
+    <style type="text/css">
+        #divCoordenadas{
+            border:solid 1px #CCC;
+            padding:10px;
+            width:200px;
+            text-align:center;
+            border-radius:5px;
+            box-shadow:1px 1px 10px #C0C0C0;
+            float:left;
+        }
+        #divEstado{
+            border:solid 1px #CCC;
+            padding:10px;
+            width:200px;
+            text-align:center;
+            border-radius:5px;
+            box-shadow:1px 1px 10px #C0C0C0;
+            float:right;
+        }
+        #divScroll{
+            margin:20px;
+            padding:10px;
+            height:100px;
+            overflow-y:scroll;
+            border-radius:5px;
+            box-shadow:1px 1px 10px #C0C0C0;
+            float:right;
+        }
+    </style>
+    </head>                 
+    <body>
+        <div id = "divCoordenadas"></div>
+        <div id = "divEstado"></div>
+        <div id = "divScroll">El ministro ha detallado que en este ejercicio perdieron la vida 103 peatones, casi el 10% de las 1.119 víctimas mortales, para destacar que "un número importante de estos casos" de atropello sucedieron al salir de su turismo por distintas razones, muy a menudo para colocar los triángulos. Se estima que son una media de 25 los fallecidos cada año arrollados cuando señalizaban una avería o accidente.
+
+"Todas y todos los que hemos bajado del coche para colocar un triángulo sabemos el peligro que entraña hacerlo", ha considerado el titular de Interior que ha defendido como "imprescindible" la adopción desde hace años de medidas que frenen este incremento de muertes.
+
+
+Interior defiende la implantación de la baliza
+Desde Interior aseguran que el Gobierno ha apostado por la V-16, convencido de que ayudará a reducir esta mortalidad por varias razones: evita el riesgo que supone bajar del vehículo; incorpora iluminación visible a un kilómetro de distancia y se integra en el sistema de vehículo conectado para hacer llegar información de la incidencia a los navegadores de los vehículos que circulan por esa carretera, y a las pantallas y paneles de información variable.
+
+"Nuestro objetivo no es sancionador o recaudatorio, lo que nos mueve es la obligación de salvar vidas", ha apostillado Marlaska, si bien no ha precisado el periodo sin sanción por no llevar este dispositivo, ya que esto lo determinará la DGT y la Agrupación de Tráfico de la Guardia Civil.
+
+Marlaska ha dicho que no disponen de datos de cuántos vehículos ya cuentan con la V-16. "Espero que lo tengan todos porque es obligatorio desde el 1 de enero", ha añadido antes de mostrar su satisfacción porque la medida se está incorporando cada día más cuanto el conductor señaliza una incidencia.
+
+Cada día, ha apuntado, unos 3.000 la usan ya, por lo que desde Interior se es "razonablemente optimista en el cumplimiento de la ley".</div>
+    </body>
+</html>

@@ -1,0 +1,1031 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Agujero Negro Final</title>
+    <style>
+        body,
+        html {
+            margin: 0;
+            padding: 0;
+            width: 100%;
+            /* min-height: 100vh; - let content define height */
+            background-color: transparent;
+            overflow: hidden;
+            /* ONE PAGE SCROLL: Disable native scroll bars/interaction */
+            cursor: crosshair;
+            scroll-behavior: smooth;
+        }
+
+        canvas {
+            display: block;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100vw;
+            height: 100vh;
+            z-index: 0;
+            background-color: #000;
+        }
+
+        /* Sections */
+        section {
+            min-height: 100vh;
+            width: 100%;
+            position: relative;
+            display: flex;
+            align-items: center;
+            /* Default center for other sections */
+            justify-content: center;
+            z-index: 1;
+            pointer-events: none;
+            /* Allow pass-through by default */
+        }
+
+        /* Portfolio Overlay Styles - Home Specific */
+        #home {
+            align-items: flex-start;
+            justify-content: flex-start;
+            /* Force top alignment */
+            padding-top: 50px;
+            padding-left: 50px;
+            box-sizing: border-box;
+            flex-direction: column;
+            /* Ensure vertical stacking */
+        }
+
+        .section-content {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+        }
+
+        /* Content Container */
+        .content-container {
+            display: flex;
+            flex-direction: column;
+            gap: 2rem;
+            align-items: flex-start;
+            pointer-events: none;
+        }
+
+        .cmd-box {
+            background-color: #000;
+            color: #fff;
+            padding: 1.5rem 2rem;
+            font-family: 'Courier New', Courier, monospace;
+            /* CMD Style */
+            pointer-events: auto;
+            /* Enable interaction */
+            border: 1px solid white;
+            /* Light white border */
+            /* "Shadow with another white border": Black shadow, then white border around it */
+            box-shadow: 4px 4px 0px 0px #000, 5px 5px 0px 0px #fff;
+            margin-bottom: 20px;
+        }
+
+        .name-title h1 {
+            margin: 0;
+            font-size: 3.5rem;
+            font-weight: normal;
+            letter-spacing: -2px;
+        }
+
+        .name-title p {
+            margin: 0.5rem 0 0 0;
+            font-size: 1.2rem;
+            opacity: 0.8;
+        }
+
+        .nav-buttons {
+            position: fixed;
+            /* Sticky sidebar */
+            top: 200px;
+            left: 50px;
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+            pointer-events: auto;
+            z-index: 100;
+            /* Above everything */
+        }
+
+        .cmd-btn {
+            background: #000;
+            color: #fff;
+            padding: 10px 15px;
+            font-family: 'Courier New', Courier, monospace;
+            font-size: 1.1rem;
+            text-align: left;
+            cursor: pointer;
+            width: 200px;
+            border: 1px solid white;
+            box-shadow: 4px 4px 0px 0px #000, 5px 5px 0px 0px #fff;
+            transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
+        }
+
+        .cmd-btn:hover {
+            background: #fff;
+            color: #000;
+            /* Move more (-4px) and scale up (1.05) */
+            transform: translate(-4px, -4px) scale(1.05);
+            /* Optional: Make shadow 'deeper' to match movement */
+            box-shadow: 8px 8px 0px 0px #000, 9px 9px 0px 0px #fff;
+        }
+
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .name-title h1 {
+                font-size: 2.5rem;
+            }
+        }
+
+        /* Typewriter Cursor */
+        .cursor {
+            display: inline-block;
+            margin-left: 2px;
+            animation: blink 1s step-end infinite;
+        }
+
+        @keyframes blink {
+
+            0%,
+            100% {
+                opacity: 1;
+            }
+
+            50% {
+                opacity: 0;
+            }
+        }
+
+        /* Glitch Effect */
+        .glitch-active {
+            position: relative;
+            animation: glitch-anim 0.3s cubic-bezier(.25, .46, .45, .94) both infinite;
+            color: #fff;
+        }
+
+        .glitch-active::before,
+        .glitch-active::after {
+            content: attr(data-text);
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            opacity: 0.8;
+        }
+
+        .glitch-active::before {
+            color: #ff00c1;
+            z-index: -1;
+            animation: glitch-anim-1 0.4s cubic-bezier(.25, .46, .45, .94) both infinite;
+        }
+
+        .glitch-active::after {
+            color: #00fff9;
+            z-index: -2;
+            animation: glitch-anim-2 0.4s cubic-bezier(.25, .46, .45, .94) both infinite;
+        }
+
+        @keyframes glitch-anim {
+            0% {
+                transform: translate(0)
+            }
+
+            20% {
+                transform: translate(-2px, 2px)
+            }
+
+            40% {
+                transform: translate(-2px, -2px)
+            }
+
+            60% {
+                transform: translate(2px, 2px)
+            }
+
+            80% {
+                transform: translate(2px, -2px)
+            }
+
+            100% {
+                transform: translate(0)
+            }
+        }
+
+        @keyframes glitch-anim-1 {
+            0% {
+                clip-path: inset(20% 0 80% 0);
+                transform: translate(-2px, 0);
+            }
+
+            20% {
+                clip-path: inset(60% 0 10% 0);
+                transform: translate(2px, 0);
+            }
+
+            40% {
+                clip-path: inset(40% 0 50% 0);
+                transform: translate(-2px, 0);
+            }
+
+            60% {
+                clip-path: inset(80% 0 5% 0);
+                transform: translate(2px, 0);
+            }
+
+            80% {
+                clip-path: inset(10% 0 60% 0);
+                transform: translate(-2px, 0);
+            }
+
+            100% {
+                clip-path: inset(30% 0 50% 0);
+                transform: translate(2px, 0);
+            }
+        }
+
+        @keyframes glitch-anim-2 {
+            0% {
+                clip-path: inset(10% 0 60% 0);
+                transform: translate(2px, 0);
+            }
+
+            20% {
+                clip-path: inset(80% 0 20% 0);
+                transform: translate(-2px, 0);
+            }
+
+            40% {
+                clip-path: inset(30% 0 10% 0);
+                transform: translate(2px, 0);
+            }
+
+            60% {
+                clip-path: inset(50% 0 80% 0);
+                transform: translate(-2px, 0);
+            }
+
+            80% {
+                clip-path: inset(20% 0 40% 0);
+                transform: translate(2px, 0);
+            }
+
+            100% {
+                clip-path: inset(60% 0 30% 0);
+                transform: translate(-2px, 0);
+            }
+        }
+
+        /* Footer Status - Vertical Right */
+        .footer-status {
+            position: fixed;
+            /* Fixed on screen */
+            top: 50%;
+            right: 20px;
+            left: auto;
+            bottom: auto;
+            transform: translateY(-50%);
+
+            background-color: #000;
+            color: #fff;
+            padding: 16px 8px;
+            font-family: 'Courier New', Courier, monospace;
+            font-size: 0.8rem;
+
+            display: flex;
+            flex-direction: column;
+            /* Vertical stack */
+            align-items: center;
+            gap: 15px;
+
+            border: 1px solid white;
+            box-shadow: -3px 3px 0px 0px #000, -4px 4px 0px 0px #fff;
+            pointer-events: auto;
+            white-space: nowrap;
+            z-index: 100;
+        }
+
+        .status-dot {
+            display: inline-block;
+            width: 8px;
+            height: 8px;
+            background-color: #0f0;
+            border-radius: 50%;
+            margin-bottom: 5px;
+            margin-left: 0;
+            box-shadow: 0 0 4px #0f0;
+        }
+
+        .separator {
+            opacity: 0.5;
+            width: 100%;
+            height: 1px;
+            background: white;
+            border: none;
+            margin: 5px 0;
+        }
+
+        /* Scroll Hint */
+        .scroll-hint {
+            position: absolute;
+            bottom: 20px;
+            left: 50%;
+            transform: translateX(-50%);
+            color: rgba(255, 255, 255, 0.5);
+            font-family: 'Courier New', Courier, monospace;
+            font-size: 1.5rem;
+            animation: scroll-pulse 2s infinite;
+            z-index: 50;
+            pointer-events: none;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+        }
+
+        @keyframes scroll-pulse {
+            0% {
+                opacity: 0.2;
+                transform: translateX(-50%) translateY(0);
+            }
+
+            50% {
+                opacity: 0.8;
+                transform: translateX(-50%) translateY(10px);
+            }
+
+            100% {
+                opacity: 0.2;
+                transform: translateX(-50%) translateY(0);
+            }
+        }
+
+        /* Content Boxes for Sections */
+        .content-box {
+            background-color: rgba(0, 0, 0, 0.9);
+            border: 1px solid white;
+            padding: 40px;
+            max-width: 800px;
+            width: 80%;
+            color: white;
+            font-family: 'Courier New', Courier, monospace;
+            box-shadow: 10px 10px 0px 0px #000, 11px 11px 0px 0px #fff;
+        }
+
+        .content-box h2 {
+            margin-top: 0;
+            border-bottom: 1px solid white;
+            padding-bottom: 10px;
+            margin-bottom: 20px;
+        }
+
+        .status-dot {
+            display: inline-block;
+            width: 8px;
+            height: 8px;
+            background-color: #0f0;
+            border-radius: 50%;
+            margin-left: 5px;
+            box-shadow: 0 0 4px #0f0;
+        }
+
+        .separator {
+            opacity: 0.5;
+        }
+
+        @media (max-width: 600px) {
+            .footer-status {
+                width: 90%;
+                font-size: 0.7rem;
+                flex-wrap: wrap;
+                justify-content: center;
+                gap: 5px 10px;
+                bottom: 20px;
+            }
+
+            .separator {
+                display: none;
+                /* Hide separators on small screens if wrapping */
+            }
+        }
+
+        /* Back to Top Arrow */
+        .back-to-top {
+            position: fixed;
+            bottom: 30px;
+            left: 50%;
+            transform: translateX(-50%);
+            color: white;
+            font-size: 2rem;
+            font-family: 'Courier New', Courier, monospace;
+            cursor: pointer;
+            z-index: 101;
+            opacity: 0;
+            pointer-events: none;
+            transition: opacity 0.3s ease, transform 0.3s ease;
+            text-shadow: 0 0 10px white;
+        }
+
+        .back-to-top.visible {
+            opacity: 1;
+            pointer-events: auto;
+        }
+
+        .back-to-top:hover {
+            transform: translateX(-50%) translateY(-5px);
+        }
+    </style>
+</head>
+
+<body>
+    <canvas id="blackhole"></canvas>
+
+    <section id="home">
+        <div class="content-container">
+            <div class="cmd-box name-title">
+                <h1 id="typewriter-h1"></h1>
+                <p>Estudiante de DAM</p>
+            </div>
+        </div>
+        <div class="scroll-hint">
+            V SCROLL V
+        </div>
+    </section>
+
+    <!-- Fixed Navigation Buttons (Moved out of content-container) -->
+    <!-- Fixed Navigation Buttons (Moved out of content-container) -->
+    <div class="nav-buttons">
+        <button class="cmd-btn" onclick="scrollToSectionIndex(1)">Sobre mi</button>
+        <button class="cmd-btn" onclick="scrollToSectionIndex(2)">Proyectos</button>
+        <button class="cmd-btn" onclick="scrollToSectionIndex(3)">Contacto</button>
+    </div>
+
+    <!-- Back to Top Arrow -->
+    <div id="back-to-top" class="back-to-top" onclick="scrollToSectionIndex(0)">
+        &#8593; <!-- Up Arrow HTML Entity -->
+    </div>
+
+    <section id="sobre-mi">
+        <div class="content-box">
+            <h2>> Sobre Mi</h2>
+            <p>Hola, soy Andrés Ivan. Me apasiona el desarrollo de software y la creación de experiencias digitales
+                inmersivas.</p>
+            <p>Estudiante de Desarrollo de Aplicaciones Multiplataforma (DAM).</p>
+        </div>
+    </section>
+
+    <section id="proyectos">
+        <div class="content-box">
+            <h2>> Proyectos</h2>
+            <p>Aquí se mostrarán mis proyectos destacados.</p>
+            <br>
+            <p>[ P R O J E C T _ 0 1 ] - Loading...</p>
+            <p>[ P R O J E C T _ 0 2 ] - Encrypted</p>
+        </div>
+    </section>
+
+    <section id="contacto">
+        <div class="content-box">
+            <h2>> Contacto</h2>
+            <p>Email: contacto@andresivan.dev</p>
+            <p>GitHub: github.com/andresivan</p>
+        </div>
+    </section>
+
+    <div class="footer-status">
+        <!-- Vertical layout -->
+        <span>Status: Online <span class="status-dot"></span></span>
+        <hr class="separator">
+        <span>Location: Zaragoza, ES</span>
+        <hr class="separator">
+        <span>Last login: Today</span>
+    </div>
+
+    <script>
+        const canvas = document.getElementById('blackhole');
+        const ctx = canvas.getContext('2d', { alpha: false }); // Optimize for no transparency on canvas itself if possible, but we need it for trails. Actually alpha: false is faster if we don't need underlying DOM transparency. We don't.
+
+        let width, height;
+        // Black Hole Center (Dynamic for parallax)
+        let bhCenterX, bhCenterY;
+        let targetBhX, targetBhY;
+
+        let mouseX = 0;
+        let mouseY = 0;
+
+        // ==========================================
+        // CONFIGURATION
+        // ==========================================
+
+        // Black Hole
+        const bhParticleCount = 2000;
+        const eventHorizonRadius = 60;
+        const globalTilt = 30 * (Math.PI / 180);
+        const cosTilt = Math.cos(globalTilt);
+        const sinTilt = Math.sin(globalTilt);
+
+        // Background Particles
+        // 8 particles per 20x20 area.
+        // We will calculate exact count on resize.
+        // Using TypedArrays for performance.
+        let bgX, bgY, bgOriginX, bgOriginY;
+        let bgCount = 0;
+
+        // Speed Control
+        let baseSpeedMultiplier = 0.5;
+        let maxAddedSpeed = 1.5;
+        let currentSpeedFactor = 0.5;
+
+        // ==========================================
+        // BLACK HOLE PARTICLE CLASS
+        // ==========================================
+        class Particle {
+            constructor() {
+                this.reset();
+            }
+
+            reset() {
+                this.type = Math.random() < 0.7 ? 1 : 2;
+                this.angle = Math.random() * Math.PI * 2;
+
+                if (this.type === 1) {
+                    this.radiusX = 100 + Math.random() * 200;
+                    this.radiusY = 30 + Math.random() * 40;
+                } else {
+                    this.radiusX = 70 + Math.random() * 20;
+                    this.radiusY = 70 + Math.random() * 20;
+                }
+
+                this.speed = 0.01 + Math.random() * 0.02;
+                this.size = Math.random() * 1.5 + 0.5;
+                this.alpha = Math.random() * 0.6 + 0.4;
+            }
+
+            updateSpecific(speedMult) {
+                this.angle -= this.speed * speedMult;
+                let localX, localY;
+
+                if (this.type === 1) {
+                    const flatten = 0.3;
+                    localX = Math.cos(this.angle) * this.radiusX;
+                    localY = Math.sin(this.angle) * this.radiusX * flatten;
+
+                    const dist = Math.hypot(localX, localY);
+                    if (localY < 0) { // Top / Back
+                        if (dist < eventHorizonRadius) {
+                            this.isVisible = false;
+                        } else {
+                            this.isVisible = true;
+                        }
+                    } else {
+                        this.isVisible = true;
+                    }
+                } else {
+                    localX = Math.cos(this.angle) * this.radiusX;
+                    localY = Math.sin(this.angle) * this.radiusY;
+                    this.isVisible = true;
+                }
+
+                if (!this.isVisible) return;
+
+                const rotatedX = localX * cosTilt - localY * sinTilt;
+                const rotatedY = localX * sinTilt + localY * cosTilt;
+
+                // Use Dynamic Center
+                this.screenX = bhCenterX + rotatedX;
+                this.screenY = bhCenterY + rotatedY;
+            }
+
+            drawWithSprite() {
+                if (!this.isVisible) return;
+
+                ctx.globalAlpha = this.alpha;
+
+                // Adjusted scaling for sharper, smaller look
+                // Sprite is now 32px with a tight core.
+                // We map particle size (0.5 - 2.0) to a smaller draw draw dimension to avoid "blobs"
+                const sSize = 6 + (this.size * 8);
+
+                ctx.drawImage(glowSprite, this.screenX - sSize / 2, this.screenY - sSize / 2, sSize, sSize);
+
+                ctx.globalAlpha = 1.0; // Reset
+            }
+
+            draw() {
+                // Kept for fallback, but main loop uses drawWithSprite
+                if (!this.isVisible) return;
+
+                ctx.fillStyle = `rgba(255, 255, 255, ${this.alpha})`;
+                ctx.shadowBlur = 10;
+                ctx.shadowColor = `rgba(255, 255, 255, ${this.alpha})`;
+
+                ctx.beginPath();
+                ctx.arc(this.screenX, this.screenY, this.size, 0, Math.PI * 2);
+                ctx.fill();
+                ctx.shadowBlur = 0;
+            }
+        }
+
+        let particles = [];
+
+        // ==========================================
+        // INIT & RESIZE
+        // ==========================================
+        let glowSprite;
+
+        // ==========================================
+        // INIT & RESIZE
+        // ==========================================
+        // ==========================================
+        // UI & INTERACTION
+        // ==========================================
+        const buttons = document.querySelectorAll('.cmd-btn');
+        buttons.forEach(btn => {
+            // Save original text
+            btn.dataset.originalText = btn.innerText;
+
+            btn.addEventListener('mouseenter', () => {
+                btn.innerText = '> ' + btn.dataset.originalText;
+            });
+
+            btn.addEventListener('mouseleave', () => {
+                btn.innerText = btn.dataset.originalText;
+            });
+        });
+
+        // ==========================================
+        // TYPEWRITER EFFECT
+        // ==========================================
+        function startTypewriter() {
+            const textToType = "> Andrés Ivan";
+            const target = document.getElementById('typewriter-h1');
+            const cursorHtml = '<span class="cursor">_</span>';
+            let index = 0;
+
+            function typeChar() {
+                if (index <= textToType.length) {
+                    // Update text with current chunk + blinking cursor
+                    target.innerHTML = textToType.substring(0, index) + cursorHtml;
+                    index++;
+                    // Random delay for realistic typing
+                    const delay = 100 + Math.random() * 50;
+                    setTimeout(typeChar, delay);
+                } else {
+                    // Ensure final state with cursor
+                    target.innerHTML = textToType + cursorHtml;
+                }
+            }
+
+            typeChar();
+        }
+
+        // Start everything on load
+        startTypewriter();
+
+        // ==========================================
+        // GLITCH EFFECT
+        // ==========================================
+        const glitchTarget = document.getElementById('typewriter-h1');
+        let isGlitching = false;
+
+        function triggerGlitch() {
+            if (isGlitching) return;
+            isGlitching = true;
+
+            // Set data-text for the pseudo-elements (content: attr(data-text))
+            // We need to strip the cursor HTML for the data-text
+            glitchTarget.setAttribute('data-text', glitchTarget.innerText);
+
+            glitchTarget.classList.add('glitch-active');
+
+            // Remove after short duration
+            setTimeout(() => {
+                glitchTarget.classList.remove('glitch-active');
+                isGlitching = false;
+            }, 300); // 300ms glitch duration
+        }
+
+        // 1. Random Intervals (5-10 seconds)
+        function scheduleRandomGlitch() {
+            const delay = 5000 + Math.random() * 5000; // 5s to 10s
+            setTimeout(() => {
+                triggerGlitch();
+                scheduleRandomGlitch(); // recursive schedule
+            }, delay);
+        }
+        scheduleRandomGlitch();
+
+        // 2. Mouse Velocity Trigger
+        let lastMouseX = 0;
+        let lastMouseY = 0;
+        let lastMouseTime = Date.now();
+        const velocityThreshold = 1.5; // pixels per ms, adjust sensitivity
+
+        window.addEventListener('mousemove', (e) => {
+            // Already updating global mouseX/mouseY in other listener, but needed delta here
+            // We can just use the local e.clientX for delta calc to be self-contained
+            const now = Date.now();
+            const dt = now - lastMouseTime;
+
+            if (dt > 50) { // Check every ~50ms
+                const dx = e.clientX - lastMouseX;
+                const dy = e.clientY - lastMouseY;
+                const dist = Math.hypot(dx, dy);
+                const speed = dist / dt;
+
+                if (speed > velocityThreshold) {
+                    // Trigger glitch if fast
+                    triggerGlitch();
+                }
+
+                lastMouseX = e.clientX;
+                lastMouseY = e.clientY;
+                lastMouseTime = now;
+            }
+        });
+
+        // 3. Back to Top Visibility Logic
+        const backToTopBtn = document.getElementById('back-to-top');
+        window.addEventListener('scroll', () => {
+            // Show arrow as soon as we leave the very top area
+            if (window.scrollY > 100) {
+                backToTopBtn.classList.add('visible');
+            } else {
+                backToTopBtn.classList.remove('visible');
+            }
+        });
+
+        // ==========================================
+        // ONE PAGE SCROLL LOGIC
+        // ==========================================
+        const sections = ['home', 'sobre-mi', 'proyectos', 'contacto'];
+        let currentSectionIndex = 0;
+        let isScrolling = false;
+        const scrollCooldown = 200; // ms to wait before next scroll (human behavior adaptation)
+
+        function scrollToSectionIndex(index) {
+            if (index < 0 || index >= sections.length) return;
+            currentSectionIndex = index;
+            const target = document.getElementById(sections[currentSectionIndex]);
+            if (target) {
+                target.scrollIntoView({ behavior: 'smooth' });
+            }
+        }
+
+        window.addEventListener('wheel', (e) => {
+            e.preventDefault(); // Prevent default scroll
+
+            if (isScrolling) return;
+
+            // Determine direction
+            const direction = e.deltaY > 0 ? 1 : -1;
+
+            // Logic: Only move if we aren't at bounds
+            if (direction === 1 && currentSectionIndex < sections.length - 1) {
+                scrollToSectionIndex(currentSectionIndex + 1);
+                activateCooldown();
+            } else if (direction === -1 && currentSectionIndex > 0) {
+                scrollToSectionIndex(currentSectionIndex - 1);
+                activateCooldown();
+            }
+        }, { passive: false }); // passive: false needed to use preventDefault
+
+        function activateCooldown() {
+            isScrolling = true;
+            setTimeout(() => {
+                isScrolling = false;
+            }, scrollCooldown);
+        }
+
+        function init() {
+            onResize();
+            // Start centers centered
+            bhCenterX = width / 2;
+            bhCenterY = height / 2;
+            targetBhX = width / 2;
+            targetBhY = height / 2;
+            mouseX = width / 2;
+            mouseY = height / 2;
+
+            // Pre-render glow sprite for performance
+            createGlowSprite();
+
+            // Init BH Particles
+            particles = [];
+            for (let i = 0; i < bhParticleCount; i++) particles.push(new Particle());
+
+            // Init Background Particles
+            initBackgroundParticles();
+
+            animate();
+        }
+
+        function createGlowSprite() {
+            const size = 32; // Higher resolution sprite (power of 2)
+            glowSprite = document.createElement('canvas');
+            glowSprite.width = size;
+            glowSprite.height = size;
+            const gCtx = glowSprite.getContext('2d');
+            const half = size / 2;
+
+            // Sharper Gradient:
+            // 0 -> 0.15: Solid White Core (The "dot")
+            // 0.15 -> 0.5: Rapid decay (Glow)
+            // 1.0: Transparent
+            const grad = gCtx.createRadialGradient(half, half, 0, half, half, half);
+            grad.addColorStop(0, 'rgba(255, 255, 255, 1)');
+            grad.addColorStop(0.15, 'rgba(255, 255, 255, 1)');
+            grad.addColorStop(0.4, 'rgba(255, 255, 255, 0.2)');
+            grad.addColorStop(1, 'rgba(255, 255, 255, 0)');
+
+            gCtx.fillStyle = grad;
+            gCtx.fillRect(0, 0, size, size);
+        }
+
+        function initBackgroundParticles() {
+            // "4 particles per 20x20 squares"
+            // Density = 4 / 400px^2 = 0.01 particles/px^2
+            const cols = Math.ceil(width / 20);
+            const rows = Math.ceil(height / 20);
+
+            const particlesPerCell = 4; // Reduced to 4
+            bgCount = cols * rows * particlesPerCell;
+
+            // Typed Arrays for performance (~40k+ items)
+            bgX = new Float32Array(bgCount);
+            bgY = new Float32Array(bgCount);
+            bgOriginX = new Float32Array(bgCount);
+            bgOriginY = new Float32Array(bgCount);
+
+            let index = 0;
+            for (let cx = 0; cx < cols; cx++) {
+                for (let cy = 0; cy < rows; cy++) {
+                    const cellX = cx * 20;
+                    const cellY = cy * 20;
+
+                    for (let i = 0; i < particlesPerCell; i++) {
+                        // Random pos within cell
+                        const px = cellX + Math.random() * 20;
+                        const py = cellY + Math.random() * 20;
+
+                        bgX[index] = px;
+                        bgY[index] = py;
+                        bgOriginX[index] = px;
+                        bgOriginY[index] = py;
+                        index++;
+                    }
+                }
+            }
+        }
+
+        function onResize() {
+            width = window.innerWidth;
+            height = window.innerHeight;
+            canvas.width = width;
+            canvas.height = height;
+
+            // Re-init BG if size changes significantly? 
+            // For now, simpler to just reload or let them be clipped/empty area.
+            // Let's re-init BG
+            initBackgroundParticles();
+        }
+
+        window.addEventListener('resize', onResize);
+        window.addEventListener('mousemove', (e) => {
+            mouseX = e.clientX;
+            mouseY = e.clientY;
+        });
+
+        // ==========================================
+        // ANIMATION LOOP
+        // ==========================================
+        function animate() {
+            // 1. Trails Effect (Semi-transparent clear)
+            // Use 'destination-out' or simple fillRect
+            ctx.fillStyle = 'rgba(0, 0, 0, 0.1)';
+            ctx.fillRect(0, 0, width, height);
+
+            // 2. Update Parallax Center
+            // "Mueva ligeramente cuando se acerca el cursor"
+            const parallaxAmount = 0.02; // Small factor
+            targetBhX = (width / 2) + (mouseX - width / 2) * parallaxAmount;
+            targetBhY = (height / 2) + (mouseY - height / 2) * parallaxAmount;
+
+            // Smooth lerp
+            bhCenterX += (targetBhX - bhCenterX) * 0.1;
+            bhCenterY += (targetBhY - bhCenterY) * 0.1;
+
+            // 3. Update & Draw Background Particles
+            ctx.fillStyle = "white"; // Batch color for simple dots
+            // Note: We can't do shadowBlur effectively for 40k particles each frame without dropping fps.
+            // So plain white dots for background.
+
+            ctx.beginPath();
+
+            // Mouse Interaction configs
+            const repelRadius = 60; // Matches approx blue circle size (event horizon size)
+            const repelRadiusSq = repelRadius * repelRadius;
+
+            // Loop typed arrays
+            // OPTIMIZATION: Removed trigonometric functions (sin/cos/atan2) inside the loop.
+            // Using vector normalization instead.
+            for (let i = 0; i < bgCount; i++) {
+                const ox = bgOriginX[i];
+                const oy = bgOriginY[i];
+                let x = bgX[i];
+                let y = bgY[i];
+
+                // Optimization: Simple AABB check before expensive math
+                // If particle is too far from mouse X/Y generally, skip detailed check.
+                if (Math.abs(x - mouseX) < repelRadius && Math.abs(y - mouseY) < repelRadius) {
+                    // Vector from mouse to particle
+                    const dx = x - mouseX;
+                    const dy = y - mouseY;
+                    const distSq = dx * dx + dy * dy;
+
+                    if (distSq < repelRadiusSq) {
+                        // Push away
+                        const dist = Math.sqrt(distSq);
+                        // Avoid division by zero
+                        if (dist > 0.1) {
+                            const force = (repelRadius - dist) / repelRadius; // 0 to 1
+
+                            // Normalization: (dx / dist) is cos, (dy / dist) is sin
+                            const moveX = (dx / dist) * force * 2.25;
+                            const moveY = (dy / dist) * force * 2.25;
+
+                            x += moveX;
+                            y += moveY;
+                        }
+                    } else {
+                        // Return to origin (Elastic) - Only if moved?
+                        // Actually this block handles if it was moved previously but now outside radius
+                        x += (ox - x) * 0.1;
+                        y += (oy - y) * 0.1;
+                    }
+                } else {
+                    // Check if it needs to return to origin (if displaced previously)
+                    // Fast check: is x == ox?
+                    if (Math.abs(x - ox) > 0.1 || Math.abs(y - oy) > 0.1) {
+                        x += (ox - x) * 0.1;
+                        y += (oy - y) * 0.1;
+                    }
+                    // else: stable, do nothing
+                }
+
+                bgX[i] = x;
+                bgY[i] = y;
+
+                // Add rect to path (faster than arc for tiny dots)
+                ctx.rect(x, y, 1, 1);
+            }
+            ctx.fill();
+
+            // 4. Draw Black Hole Orbit System
+
+            // Speed Interaction Main Logic
+            // Reuse dist from center if possible, but mouse moves.
+            const dxC = mouseX - bhCenterX;
+            const dyC = mouseY - bhCenterY;
+            const dist = Math.hypot(dxC, dyC); // hypot is okay here (once per frame)
+
+            const normalizedDist = Math.min(dist / 400, 1);
+            const targetSpeed = baseSpeedMultiplier + (1 - normalizedDist) * maxAddedSpeed;
+            currentSpeedFactor += (targetSpeed - currentSpeedFactor) * 0.1;
+
+            // Draw Black Hole Glow/Shadow
+            const grad = ctx.createRadialGradient(bhCenterX, bhCenterY, eventHorizonRadius, bhCenterX, bhCenterY, eventHorizonRadius * 1.5);
+            grad.addColorStop(0, 'rgba(0,0,0,1)');
+            grad.addColorStop(1, 'rgba(255, 255, 255, 0.15)');
+            ctx.fillStyle = grad;
+            ctx.beginPath(); ctx.arc(bhCenterX, bhCenterY, eventHorizonRadius * 1.5, 0, Math.PI * 2); ctx.fill();
+
+            // Event Horizon
+            ctx.fillStyle = "black";
+            ctx.beginPath();
+            ctx.arc(bhCenterX, bhCenterY, eventHorizonRadius, 0, Math.PI * 2);
+            ctx.fill();
+
+            // Draw Orbit Particles
+            // OPTIMIZATION: Use drawImage with pre-rendered glow instead of shadowBlur
+            particles.forEach(p => {
+                p.updateSpecific(currentSpeedFactor);
+                p.drawWithSprite();
+            });
+
+            requestAnimationFrame(animate);
+        }
+
+        init();
+
+    </script>
+</body>
+
+</html>

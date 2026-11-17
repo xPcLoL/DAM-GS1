@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Formulario de insercion de contactos con indexedDB</title>
+    <script>
+        document.addEventListener('DOMContentLoaded', function(){
+            var lista = document.getElementById('contactosList');
+
+            var request = window.indexedDB.open('contactos', 1);
+
+            request.onerror = function(event){
+                console.log("Error al abrir la base de datos");
+            }
+
+            request.onsuccess = function(event){
+                var db = event.target.result;
+                
+                var form = document.getElementById('contactoForm');
+                form.addEventListener('submit',function(e){
+                    var idC = form.elements['id'].value;
+                    var nombreC = form.elements['nombre'].value;
+                    var transaction = db.transaction(['contactos'], 'readwrite');
+                    var store = transaction.objectStore('contactos');
+                    var contacto = {id: idC, nombre: nombreC};
+                    var addRequest = store.add(contacto);
+                    addRequest.onsuccess = function(event){
+                        console.log('Contacto agregado correctamente');
+                        form.reset();
+                    }
+                    addRequest.onerror = function(event){
+                        console.log('Error al agregar el contacto');
+                    }
+                });
+            };
+
+            request.onupgradeneeded = function(event){
+                var db = event.target.result;
+                var store = db.createObjectStore('contactos', {keyPath:'id'});
+            }
+
+            
+        });
+    </script>
+</head>
+<body>
+    <h1>Insertar contacto</h1>
+    <form id="contactoForm">
+        <label for="id">ID:</label>
+        <input id="id" name="id" required><br>
+        <label for="nombre">Nombre:</label>
+        <input id="nombre" name="nombre" required><br>
+        <button type="submit">Agregar Contacto</button>
+    </form>
+</body>
+</html>

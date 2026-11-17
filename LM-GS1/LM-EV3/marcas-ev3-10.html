@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Formulario de insercion de contactos con indexedDB</title>
+    <script>
+        document.addEventListener('DOMContentLoaded', function(){
+            var lista = document.getElementById('contactosList');
+
+            var request = window.indexedDB.open('contactos', 1);
+
+            request.onerror = function(event){
+                console.log("Error al abrir la base de datos");
+            }
+
+            request.onsuccess = function(event){
+                var db = event.target.result;
+                //Abrimos la tabla para lectura y escritura
+                var transaction = db.transaction(['contactos'],'readwrite');
+                var store = transaction.objectStore('contactos');
+                var cursor = store.openCursor();
+
+                cursor.onsuccess = function(event){
+                    var cursor = event.target.result;
+                    while(cursor){
+                        var contacto = cursor.value;
+                        var row = contactosTabla.insertRow();
+                        var idCelda = row.insertCell(0);
+                        var nombreCelda = row.insertCell(1);
+                        var accionCelda = row.insertCell(2);
+                        idCelda.textContent = contacto.id;
+                        nombreCelda.textContent = contacto.nombre;
+                        var deleteBoton = document.createElement('button');
+                        deleteBoton.textContent = 'Eliminar';
+                        deleteBoton.onclick = function(){
+                            var borradoTransaction = db.transaction(['contactos'], 'readwrite');
+                            var borradoStore = transaction.objectStore('contactos');
+                            //elimina el registro de la tabla de contactos
+                            borradoStore.delete(contacto.id);
+                            //Eliminar la fila de la tabla
+                            row.remove();
+                        }
+
+                        accionCelda.appendChild(deleteBoton);
+
+                        cursor = cursor.continue();
+                    }
+                }
+            }
+        });
+    </script>
+</head>
+<body>
+    <h1>Contactos</h1>
+    <table id="contactosTabla" align="center">
+        <thead>
+            <tr>
+                <th>ID</th><th>NOMBRE</th><th>ACCION</th>
+            </tr>
+        </thead>
+    </table>
+</body>            

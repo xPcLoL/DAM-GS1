@@ -1,0 +1,43 @@
+# Comprimidos (el zip pasa de 100 MB)
+*.zip
+
+# Dependencias y builds
+node_modules/
+venv/
+.venv/
+__pycache__/
+.next/
+target/
+dist/
+build/
+out/
+*.class
+
+# Secretos
+.env
+.env.*
+
+# IDE / sistema
+.idea/
+.vscode/
+desktop.ini
+Thumbs.db
+
+# Repos de terceros clonados
+Digitalización-GS1/claw-code/
+Digitalización-GS1/proy-claw/
+
+# Subcarpetas que ya son repos git propios
+Entornos-GS1/ExamRepoED*/
+Entornos-GS1/Githubb/dev2/git_enpareja/
+Entornos-GS1/Githubb/Ej2/ej2-ent/
+Entornos-GS1/Githubb/nuevacarpeta/
+Entornos-GS1/Githubb/pruebaEj2/ej2-ent/
+Entornos-GS1/Githubb/pruebaEj2/nuevo/
+Entornos-GS1/Githubb/Repositorio1/
+Entornos-GS1/Githubb/Repositorio1/pythonproject/
+Entornos-GS1/Githubb/WebPairProject/
+
+# Instaladores de programas
+*.exe
+*.msi

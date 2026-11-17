@@ -1,0 +1,21 @@
+<html>
+    <head>
+        <title>Cambio de clase</title>
+        <style type ="text/css">
+           #lamine{
+            position: absolute;
+            top: 20px;
+           }
+        </style>
+        <script language = "JavaScript">
+            function mover(){
+                lamine.style.left=parseInt(lamine.style.left) +10;
+            }
+        </script>
+    </head>
+    <body onload="setInterval('mover()',200)">
+       <div id = "lamine" style="left: 100;">
+            <img src="imagenes/playero2.jfif" height="200" width="400">
+       </div>
+    </body>
+</html>

@@ -1,0 +1,46 @@
+<html>
+    <head>
+         <title>Usando jquery-3</title>
+    <script src="jquery-3.7.1.min.js"></script>
+    <script>
+        /*
+          Chuleta:
+            Acceder a objeto de windows(que no lo he creado) -> $(document)
+            Acceder a objeto mediante su id -> $("#texto1")
+            Acceder a objeto mediante su clase -> $(".nomClase")
+            Acceder a objeto mediante su etiqueta -> $("nomTag")
+
+            Ejemplo: $(document).ready(function(){contenido funcion}); -> "Al cargar la pagina web,
+                                                                          realizar estas instrucciones"
+
+            Y pues luego usando .noseque puedes acceder a las propiedades del objeto y alterarlas 
+            o ponerle algo dentro o quitarselo
+        */
+        // $("#texto1") Esto es literalmente esto -> <div id="texto1"></div>
+        $(document).ready(function(){
+
+            $("#texto1").text("cambodia");
+            $("#texto2").html("<input type=button value='Haz click'>")
+
+            $(document).mousemove(function(event){
+                $("#texto3").text(event.clientX + " - " + event.clientY)
+                $("#texto4").text(event.pageX + " - " + event.pageY)
+            });
+        });
+    </script>
+    </head>                 
+    <body>
+        <div id="texto1">
+
+        </div>
+        <div id="texto2">
+            
+        </div>
+        <div id="texto3">
+            
+        </div>
+        <div id="texto4">
+            
+        </div>
+    </body>
+</html>

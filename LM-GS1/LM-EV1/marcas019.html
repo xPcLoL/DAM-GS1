@@ -1,0 +1,40 @@
+<html>
+    <head>
+        <title>Robin Hood</title>
+        <style>
+            img{
+                position: absolute;
+            }
+        </style>
+        <script language="JavaScript">
+            function mover(){
+                posicion = event.y
+                //event.y me da la posicion "y" del raton
+                img = document.getElementById("robin")
+                //document.getElementById("robin") le da a img la id de lo que quiera
+                img.style.top = posicion - 75
+                //img.style.top cambia el estilo del objeto, en este caso la altura
+            }
+            function globoMov(){
+                globo.style.top = parseInt(globo.style.top)-3;
+                if(parseInt(globo.style.top) < -100){
+                    globo.style.top = 500;
+                }
+            }
+            function disparo(){
+                flecha.style.left = parseInt(flecha.style.left) + 5;
+                if((parseInt(flecha.style.top) > parseInt(globo.style.top))&&(parseInt(flecha.style.top) < (parseInt(globo.style.top)+150))&&(parseInt(flecha.style.right) > parseInt(globo.style.right))&&(parseInt(flecha.style.right) < (parseInt(globo.style.right)-150))){
+                    winner.style.top = 200;
+                    winner.style.left = 200;
+                }  
+            }
+        </script>
+    </head>
+    <body onmousemove="mover()" onload="setInterval('globoMov()',50)" onclick="flecha.style.left = 145; flecha.style.top = event.y; setInterval('disparo()',50)">
+
+    </body>
+    <img id="robin" src="imagenes/robin.jfif"  height="150">
+    <img id="globo" src="imagenes/globo.jfif" style="right: 500px; top: 500px;" height="150">
+    <img id="winner" src="imagenes/winner.jfif"style="top:-600px" width="500" height="500">
+    <img id="flecha" src="imagenes/felcha.png" width="200" height="60" style="left: 145; top: -150;">
+</html>

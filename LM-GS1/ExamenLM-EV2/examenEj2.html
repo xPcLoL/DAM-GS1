@@ -1,0 +1,31 @@
+<html>
+<head>
+    <title>Ejercicio 2</title>
+    <script type="text/javascript" src="jquery-3.7.1.min.js"></script>
+    <script language="JavaScript">
+        $(document).ready(function(){
+            $("#iniciar").click(function(){
+                $("#panel").animate({marginLeft:"400px"},2000).animate({width:"250px",height:"250px"},2000).animate({width:"150px",height:"150px"}, 2000).animate({marginLeft:"0px" }, 2000);
+            });
+            $("#parar").click(function(){
+                $("#panel").stop();
+            });
+            $("#panel").mouseover(function(){
+                $(this).css("backgroundColor","green");
+            });
+        });
+    </script>
+    <style type="text/css">
+        #panel{
+            width: 150px;
+            height: 150px;
+            background-color: blue;
+        }
+    </style>
+</head>
+<body>
+    <input type="button" id="iniciar" value="Iniciar">
+    <input type="button" id="parar" value="Parar">
+    <div id="panel"></div>
+</body>
+</html>

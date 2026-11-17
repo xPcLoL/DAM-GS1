@@ -1,0 +1,47 @@
+@startuml tienda1
+title Sistema de gestión de pedidos en una tienda online
+
+class Cliente {
+  - idCliente: String
+  - nombre: String
+  - direccionEnvio: String
+  - correoElectronico: String
+  - telefono: String
+  + registrarse(): void
+  + realizarPedido(): Pedido
+  + consultarPedidos(): List<Pedido>
+  + cancelarPedido(pedido: Pedido): void
+}
+
+class Producto {
+  - idProducto: String
+  - nombre: String
+  - descripcion: String
+  - precio: double
+  - categoria: String
+  - stock: int
+  + actualizarStock(cantidad: int): void
+  + comprobarStock(cantidad: int): boolean
+}
+
+class Pedido {
+  - idPedido: String
+  - fechaPedido: Date
+  - estado: String
+  - importeTotal: double
+  + calcularImporteTotal(): double
+  + cambiarEstado(nuevoEstado: String): void
+  + cancelar(): void
+}
+
+class LineaPedido {
+  - cantidad: int
+  - precioUnitario: double
+  + calcularSubtotal(): double
+}
+
+Cliente "1" -- "0..*" Pedido : realiza
+Pedido "1" *-- "1..*" LineaPedido : contiene
+LineaPedido "0..*" -- "1" Producto : incluye
+
+@enduml

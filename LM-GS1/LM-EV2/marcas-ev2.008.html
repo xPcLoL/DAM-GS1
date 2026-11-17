@@ -1,0 +1,65 @@
+<html>
+    <head>
+         <title>Forma de crear objetos</title>
+    
+    <style type="text/css">
+        table{
+            border-collapse: collapse;
+            width: 200px;
+            height: 200px;
+        }
+        td{
+            border: 2px solid black;
+            width: 50%;
+            height: 50px;
+            text-align: center;
+            cursor: pointer;
+        }
+        img{
+            width: 40px;
+            height: 40px;
+            padding: 2px;
+        }
+    </style>
+    </head>                 
+    <body>
+       <table>
+        <tr>
+            <td>
+
+            </td>
+            <td>
+
+            </td>
+        </tr>
+        <tr>
+             <td>
+
+            </td>
+            <td>
+                
+            </td>
+        </tr>
+       </table>
+       <script type="text/javascript" src="jquery-3.7.1.min.js"></script>
+    <script language="JavaScript">
+      $(document).ready(function(){
+            //Crear los 4 objetos img directamente
+            let img1 = $("<img>", {src: "imagenes/felcha.png"});
+            let img2 = $("<img>", {src: "imagenes/fogo.jfif"});
+            let img3 = $("<img>", {src: "imagenes/fondo0.jpg"});
+            let img4 = $("<img>", {src: "imagenes/fondo1.jfif"});
+
+            //Colocar las imagenes en las celdas de la tabla
+            $("td").eq(0).append(img1);
+            $("td").eq(1).append(img2);
+            $("td").eq(2).append(img3);
+            $("td").eq(3).append(img4);
+
+            //esto es lo que quiere meter en el examen
+    });
+      
+            
+    </script>
+    </body>
+</html>

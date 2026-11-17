@@ -1,0 +1,44 @@
+<html>
+    <head>
+        <title>Ejercicio1</title>
+        <script language="JavaScript">
+            function mostrarEdad(valor){
+                verEdad.innerHTML = valor;
+            }
+        </script>
+    </head>
+    <body>
+        <form action=" " method="post">
+            <h2>Formulario HTML5</h2>
+            <p>
+                Nombre:<input type="text" name="nombre" autofocus required> <!-- name=" " para que se lea desde otra pagina, el id solo desde el mismo archivo-->
+            </p>
+            <p>
+                E-mail:<input type="email" name="email" placeholder="Introduzca su email...">
+            </p>
+            <p>
+                Edad:<input type="range" min="18" max="70" value="35" onchange="mostrarEdad(this.value)"><span id="verEdad">35</span>
+            </p>
+            <p>
+                Color favorito:<input type="color" name="color">x
+            </p>
+            <p>
+                Web:<input type="url" name="web" autocomplete="on">
+            </p>
+            <p>
+                Nº par de 0 a 10:<input type="number" name="par" min="0" max="10" step="2">
+            </p>
+            <p>
+                Destinatario:<input type="email" name="destinatario" required list="listaDestinatarios">
+                <datalist id="listaDestinatarios">
+                    <option value="admin@salesianos.edu">Administrador</option>
+                    <option value="agustin.sole@zaragoza.salesianos.edu">Agustín Solé</option>
+                    <option value="alvaro.juan@zaragoza.salesianos.edu">Álvaro Juan</option>
+                </datalist>
+            </p>
+            <p>
+                <input type="submit">
+            </p>
+        </form>
+    </body>
+</html>

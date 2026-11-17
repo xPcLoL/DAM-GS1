@@ -1,0 +1,23 @@
+<html>
+    <head>
+         <title>Animacion</title>
+    <script type="text/javascript" src="jquery-3.7.1.min.js"></script>
+    <script language="JavaScript">
+      $(document).ready(function(){
+        $("#divAnimado1").append($("<input>").attr("type","button").attr("value","Esto es un boton")); //append es para meter cosas dentro de algo,
+                                                //y que en el dolar de me ponga con $("#") 
+                                                //es porque estoy accediendo a un nombre o una id 
+        $("#divAnimado2").append($("<button>").text("Esto es otro boton")); // 2 maneras de hacer lo mismo
+      });
+      
+            //crear objetos en memoria ram y con append que se carguen donde le digamos examen
+    </script>
+    <style type="text/css">
+       
+    </style>
+    </head>                 
+    <body>
+        <div id="divAnimado1"></div>
+        <div id="divAnimado2"></div>
+    </body>
+</html>

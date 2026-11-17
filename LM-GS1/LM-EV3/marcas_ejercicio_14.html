@@ -1,0 +1,308 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>marcas ejercicio 14</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 20px;
+            background-color: #f4f6f9;
+            color: #333;
+        }
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+            background-color: #fff;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        }
+        h1, h2 {
+            color: #2c3e50;
+            border-bottom: 2px solid #3498db;
+            padding-bottom: 8px;
+        }
+        form {
+            background-color: #ecf0f1;
+            padding: 15px;
+            border-radius: 5px;
+            margin-bottom: 20px;
+        }
+        form label {
+            display: inline-block;
+            width: 120px;
+            font-weight: bold;
+            margin-bottom: 10px;
+        }
+        form input[type="text"] {
+            width: 200px;
+            padding: 5px;
+            margin-bottom: 10px;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+        }
+        button, input[type="button"], input[type="submit"] {
+            background-color: #3498db;
+            color: white;
+            border: none;
+            padding: 8px 15px;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 14px;
+            margin-top: 5px;
+        }
+        button:hover, input[type="button"]:hover, input[type="submit"]:hover {
+            background-color: #2980b9;
+        }
+        ul {
+            list-style-type: none;
+            padding: 0;
+        }
+        li {
+            background-color: #f9f9f9;
+            padding: 10px;
+            border: 1px solid #eee;
+            margin-bottom: 5px;
+            border-radius: 4px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        table {
+            border-collapse: collapse;
+            width: 100%;
+            margin-top: 15px;
+            background-color: #fff;
+        }
+        th, td {
+            border: 1px solid #ddd;
+            padding: 10px;
+            text-align: left;
+        }
+        th {
+            background-color: #f2f2f2;
+            color: #2c3e50;
+        }
+        .btn-confirmar {
+            background-color: #2ecc71;
+            font-size: 16px;
+            padding: 10px 20px;
+            margin-top: 20px;
+            display: block;
+            width: 100%;
+            text-align: center;
+        }
+        .btn-confirmar:hover {
+            background-color: #27ae60;
+        }
+        .alert {
+            padding: 10px;
+            background-color: #d4edda;
+            color: #155724;
+            border: 1px solid #c3e6cb;
+            border-radius: 4px;
+            margin-bottom: 15px;
+            display: none;
+        }
+    </style>
+    <script>
+        var db;
+
+        document.addEventListener('DOMContentLoaded', function() {
+            // 1. Crear / Abrir base de datos "Tienda"
+            var request = window.indexedDB.open('Tienda', 1);
+
+            request.onerror = function(event) {
+                console.log("Error al abrir la base de datos");
+            };
+
+            request.onsuccess = function(event) {
+                db = event.target.result;
+                mostrarProductos();
+                mostrarCarrito();
+            };
+
+            request.onupgradeneeded = function(event) {
+                var db = event.target.result;
+                // Crear tabla "Productos" con campos id y nomProducto (siendo id la clave principal)
+                db.createObjectStore('Productos', { keyPath: 'id' });
+                // Creamos la segunda tabla para cumplir estrictamente con "dos tablas"
+                db.createObjectStore('Categorias', { keyPath: 'id' });
+            };
+
+            // 2. Formulario para introducir productos
+            var form = document.getElementById('productoForm');
+            form.addEventListener('submit', function(e) {
+                e.preventDefault();
+                var id = document.getElementById('prodId').value.trim();
+                var nomProducto = document.getElementById('prodNombre').value.trim();
+
+                if (id === "" || nomProducto === "") {
+                    alert("Por favor, rellena todos los campos.");
+                    return;
+                }
+
+                var transaction = db.transaction(['Productos'], 'readwrite');
+                var store = transaction.objectStore('Productos');
+                var nuevoProducto = { id: id, nomProducto: nomProducto };
+
+                var addRequest = store.add(nuevoProducto);
+
+                addRequest.onsuccess = function(event) {
+                    mostrarAlerta("Producto agregado correctamente a la Base de Datos.");
+                    form.reset();
+                    mostrarProductos();
+                };
+
+                addRequest.onerror = function(event) {
+                    alert("Error al agregar el producto. Recuerda que el ID debe ser único.");
+                };
+            });
+        });
+
+        // 3. Mostrar la lista de productos existentes
+        function mostrarProductos() {
+            var lista = document.getElementById('listaProductos');
+            lista.innerHTML = "";
+
+            var transaction = db.transaction(['Productos'], 'readonly');
+            var store = transaction.objectStore('Productos');
+            var cursorRequest = store.openCursor();
+
+            cursorRequest.onsuccess = function(event) {
+                var cursor = event.target.result;
+                if (cursor) {
+                    var producto = cursor.value;
+                    var li = document.createElement('li');
+                    
+                    var info = document.createElement('span');
+                    info.innerHTML = "<strong>ID:</strong> " + producto.id + " | <strong>Producto:</strong> " + producto.nomProducto;
+                    li.appendChild(info);
+
+                    var btnAdd = document.createElement('button');
+                    btnAdd.textContent = "Añadir al carrito";
+                    btnAdd.onclick = function() {
+                        almacenarCarrito(producto.id, producto.nomProducto);
+                    };
+
+                    li.appendChild(btnAdd);
+                    lista.appendChild(li);
+
+                    cursor.continue();
+                } else if (lista.children.length === 0) {
+                    lista.innerHTML = "<li>No hay productos en la tienda.</li>";
+                }
+            };
+        }
+
+        // 4. Añadir al carrito (sessionStorage)
+        function almacenarCarrito(id, nomProducto) {
+            sessionStorage.setItem(id, nomProducto);
+            mostrarCarrito();
+            mostrarAlerta("Producto añadido al carrito.");
+        }
+
+        // 5. Mostrar carrito leído de sessionStorage
+        function mostrarCarrito() {
+            var cesta = document.getElementById('cesta');
+            cesta.innerHTML = "";
+
+            if (sessionStorage.length === 0) {
+                cesta.innerHTML = "<p>El carrito de la compra está vacío.</p>";
+                return;
+            }
+
+            var tabla = document.createElement('table');
+            var thead = document.createElement('thead');
+            thead.innerHTML = "<tr><th>ID</th><th>Nombre Producto</th><th>Acción</th></tr>";
+            tabla.appendChild(thead);
+
+            var tbody = document.createElement('tbody');
+            for (var i = 0; i < sessionStorage.length; i++) {
+                var id = sessionStorage.key(i);
+                var nomProducto = sessionStorage.getItem(id);
+
+                var tr = document.createElement('tr');
+                tr.innerHTML = "<td>" + id + "</td><td>" + nomProducto + "</td>";
+
+                var tdAccion = document.createElement('td');
+                var btnEliminar = document.createElement('button');
+                btnEliminar.textContent = "Quitar";
+                (function(key) {
+                    btnEliminar.onclick = function() {
+                        sessionStorage.removeItem(key);
+                        mostrarCarrito();
+                    };
+                })(id);
+
+                tdAccion.appendChild(btnEliminar);
+                tr.appendChild(tdAccion);
+                tbody.appendChild(tr);
+            }
+            tabla.appendChild(tbody);
+            cesta.appendChild(tabla);
+        }
+
+        // 6. Confirmar compra: Crea cookies y vacía sessionStorage
+        function confirmarCompra() {
+            if (sessionStorage.length === 0) {
+                alert("El carrito está vacío.");
+                return;
+            }
+
+            for (var i = 0; i < sessionStorage.length; i++) {
+                var id = sessionStorage.key(i);
+                var nomProducto = sessionStorage.getItem(id);
+                // Crear cookie por cada producto
+                document.cookie = encodeURIComponent(id) + "=" + encodeURIComponent(nomProducto) + "; max-age=3600; path=/";
+            }
+
+            // Vaciar el carrito
+            sessionStorage.clear();
+            mostrarCarrito();
+            mostrarAlerta("Compra confirmada. Las cookies se han creado y el carrito se ha vaciado.");
+        }
+
+        function mostrarAlerta(mensaje) {
+            var alerta = document.getElementById('alerta');
+            alerta.textContent = mensaje;
+            alerta.style.display = 'block';
+            setTimeout(function() {
+                alerta.style.display = 'none';
+            }, 3000);
+        }
+    </script>
+</head>
+<body>
+    <div class="container">
+        <h1>Examen: Marcas Ejercicio 14</h1>
+        <div id="alerta" class="alert"></div>
+
+        <!-- Sección de inserción -->
+        <h2>1. Introducir Productos (IndexedDB)</h2>
+        <form id="productoForm">
+            <label for="prodId">ID:</label>
+            <input type="text" id="prodId" required><br>
+            <label for="prodNombre">Nombre Producto:</label>
+            <input type="text" id="prodNombre" required><br>
+            <input type="submit" value="Guardar Producto">
+        </form>
+
+        <!-- Sección de lista de productos -->
+        <h2>2. Lista de Productos Disponibles</h2>
+        <ul id="listaProductos">
+            <!-- Dinámico -->
+        </ul>
+
+        <!-- Sección del carrito -->
+        <h2>3. Carrito de la Compra (sessionStorage)</h2>
+        <div id="cesta">
+            <!-- Dinámico -->
+        </div>
+
+        <!-- Confirmar compra -->
+        <button class="btn-confirmar" onclick="confirmarCompra()">Confirmar compra</button>
+    </div>
+</body>
+</html>

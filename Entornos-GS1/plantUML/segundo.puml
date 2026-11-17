@@ -1,0 +1,57 @@
+@startuml
+class "Biblioteca"{
+
+}
+class "Usuario"{
+    -numSocio : int
+    -nombre : string 
+    -direccion : string 
+    -telefono : int 
+}
+abstract class "Empleado"{
+    -idpersonal : int
+    -nombre : string 
+    -turno : string 
+}
+class "BibliotecarioJefe"{
+    -despacho : int 
+}
+interface "Prestable"{
+    +esPrestable() : boolean
+}
+abstract class "Materiales"{
+    -codigo : int
+    -titulo : string 
+    -anoPub : Date
+}
+class "Libro"{
+    -ISBN : string 
+    -numPaginas : int 
+}
+class "Revista"{
+    -numEdicion : int
+    -periodicidad : int
+}
+abstract class "Prestamo" implements Prestable{
+    -fechaInicio : Date
+    -fechaPrevista : Date
+    -estadoPrestamo : string
+}
+class "Estanteria"{
+    -codigo : int
+    -planta : int 
+    -seccion : string
+}
+
+Empleado --|> BibliotecarioJefe
+Biblioteca "1"--*"0.." Materiales
+Usuario "1"--* "0.."Prestamo :Solicita
+Empleado "1" -- "1"Prestamo :Gestiona
+Prestamo "1"--"1" Materiales
+Estanteria "1" --o "0.." Materiales
+Materiales --|> Libro
+Materiales --|> Revista
+
+note "Padre/Hijo = <|- - Composicion = *- - Agregacion = º- - Asociacion = <--"  as N1
+@enduml
+

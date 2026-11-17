@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg id="Capa_2" data-name="Capa 2" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 534.93 228.37">
+  <defs>
+    <style>
+      .cls-1 {
+        letter-spacing: -.03em;
+      }
+
+      .cls-2 {
+        letter-spacing: 0em;
+      }
+
+      .cls-3 {
+        letter-spacing: -.11em;
+      }
+
+      .cls-4 {
+        font-family: KohinoorTelugu-Medium, 'Kohinoor Telugu';
+        font-size: 112px;
+        font-weight: 500;
+      }
+
+      .cls-4, .cls-5 {
+        fill: #eddec8;
+      }
+
+      .cls-5 {
+        font-family: kindergarten, kindergarten;
+        font-size: 54.28px;
+        letter-spacing: .05em;
+      }
+    </style>
+  </defs>
+  <g id="LOGO_BEIGE" data-name="LOGO BEIGE">
+    <g id="HARMELYS_CON_ESPI_BEIGE" data-name="HARMELYS CON ESPI BEIGE">
+      <g>
+        <text class="cls-5" transform="translate(25.89 214.21)"><tspan x="0" y="0">“Special Like You”</tspan></text>
+        <text class="cls-4" transform="translate(0 107.19)"><tspan x="0" y="0">HARMÈ</tspan><tspan class="cls-3" x="371.52" y="0">L</tspan><tspan class="cls-1" x="414.19" y="0">Y</tspan><tspan class="cls-2" x="474" y="0">S</tspan></text>
+      </g>
+    </g>
+  </g>
+</svg>

@@ -1,0 +1,56 @@
+@startuml
+abstract class "Usuario"{
+    -id : int
+    -nombre : string 
+    -email : string 
+    -contraseña : string 
+}
+class "Estudiante"{
+    +guardarProgreso() : boolean
+}
+class "Instructor"{
+    -espacialidad : string
+    -biografia : string
+}
+class "Curso"{
+    -codigo : int
+    -titulo : string 
+    -descripcion : string 
+    -precio : int 
+}
+class "Leccion"{
+    -titulo : string 
+    -contexto : string 
+    -duracion : int
+}
+class "Matricula"{
+    -fechaInscrp : Date
+    -avanceSobre100 : int
+    +cursoCompletado() : boolean
+}
+interface Evaluatable {
+    +calcularNota() : int
+}
+abstract class "Actividad" implements Evaluatable{
+    -titulo : string
+    -puntuacionMax : int
+    +corregirActividad() : boolean
+}
+class "Cuestionario"{
+    -numPreguntas : int
+}
+class "Tarea"{
+    -fechaEntrega : Date
+}
+Usuario --|> Estudiante
+Usuario --|> Instructor
+Instructor "1"-->"1" Curso :imparte
+Curso "1"--* "0.." Leccion
+Curso "1"--o "0.." Actividad
+Actividad --|> Cuestionario
+Actividad --|> Tarea
+Curso "1" --* "0.." Matricula
+Estudiante "1" --o "0.." Matricula
+note "Padre/Hijo = <|- - Composicion = *- - Agregacion = º- - Asociacion = <--"  as N1
+@enduml
+

@@ -1,0 +1,47 @@
+<html>
+    <head>
+        <title>Tres en raya (fase2)</title>
+        <style type ="text/css">
+            .val{
+                width: 30;
+                height: 35;
+                background-color: red;
+            }
+            .noval{
+                width: 30;
+                height: 35;
+                background-color: lime;
+            }
+        </style>
+        <script language = "JavaScript">
+            var n = 0;
+            function cambiar(){
+                if((event.srcElement.className == "val")&&n%2==1){
+                    event.srcElement.innerHTML = "<img src=imagenes/cruz.jpg height=35 width=30>";
+                    event.srcElement.className = "";
+                    n++;
+                }else if(event.srcElement.className == "val"){
+                    event.srcElement.innerHTML = "<img src=imagenes/circulo.png height=35 width=30>";
+                    event.srcElement.className = "";
+                    n++;
+                }
+                
+            }
+        </script>
+    </head>
+    <body onclick ="cambiar()">
+        <h1 align="center">Juego de las tres en raya</h1>
+        <table align = "center" border = "3" cellspacing = "3">
+            <tr>
+                <td class ="val"></td><td class ="val"></td><td class ="val"></td>
+            </tr>
+            <tr>
+                <td class ="val"></td><td class ="val"></td ><td class ="val"></td>
+            </tr>
+            <tr>
+                <td class ="val"></td><td class ="val"></td><td class ="val"></td>
+            </tr>
+        </table>
+    </body>
+
+</html>

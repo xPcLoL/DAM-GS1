@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg id="Capa_2" data-name="Capa 2" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 269.97 353.16">
+  <defs>
+    <style>
+      .cls-1 {
+        font-family: kindergarten, kindergarten;
+        font-size: 60.93px;
+        letter-spacing: .2em;
+      }
+
+      .cls-1, .cls-2 {
+        fill: #eddec8;
+      }
+
+      .cls-2 {
+        stroke-width: 0px;
+      }
+    </style>
+  </defs>
+  <g id="LOGO_BEIGE" data-name="LOGO BEIGE">
+    <g id="HARMELYS_CON_ESPI_BEIGE" data-name="HARMELYS CON ESPI BEIGE">
+      <g>
+        <text class="cls-1" transform="translate(32.63 337.26)"><tspan x="0" y="0">“SLY”</tspan></text>
+        <path class="cls-2" d="M265.2.52c-7.48-3.08-22.85,8.37-30.76,13.26-30.81,19.08-52.65,48.59-62.86,73.28-7.83,18.92-33.17,81.79-36,86.74-.08.14-.27.14-.35,0-2.87-4.94-28.98-67.81-36.81-86.73-10.22-24.68-32.08-54.18-62.89-73.25C27.61,8.93,12.24-2.52,4.76.57-.46,2.73-.21,25.26.19,34.18c1.37,30.93,29.23,80.28,55.99,103.59,65.96,57.43,77.02,84.99,78.87,92.36.09.37.61.36.69,0,1.68-7.39,12.21-34.94,78.1-92.38,26.75-23.32,54.59-72.67,55.95-103.61.39-8.92.63-31.46-4.59-33.61Z"/>
+      </g>
+    </g>
+  </g>
+</svg>

@@ -1,0 +1,57 @@
+
+<html>
+<head>
+    <title>Marcas21.html</title>
+    <style>
+        #imagen1 {position: absolute; left:150px; top:200px}
+        #imagen2 {position: absolute; left:300px; top:50px}
+        #imagen3 {position: absolute; left:450px; top:200px}
+        #imagen4 {position: absolute; left:300px; top:350px}
+    </style>
+    <script language="JavaScript">
+        var posicion = 0;
+        var posiciones = new Array(0,1,2,3);
+        var ejex = new Array(4);
+        var ejey = new Array(4);
+
+        ejex[0] = new Array(150, 165, 180, 195, 210, 225, 240, 255, 270, 285, 300);
+        ejex[1] = new Array(300, 315, 330, 345, 360, 375, 390, 405, 420, 435, 450);
+        ejex[2] = new Array(450, 435, 420, 405, 390, 375, 360, 345, 330, 315, 300);
+        ejex[3] = new Array(300, 285, 270, 255, 240, 225, 210, 195, 180, 165, 150);
+
+        ejey[0] = new Array(200, 185, 170, 155, 140, 125, 110, 95, 80, 65, 50);
+        ejey[1] = new Array(50, 65, 80, 95, 110, 125, 140, 155, 170, 185, 200);
+        ejey[2] = new Array(200, 215, 230, 245, 260, 275, 290, 305, 320, 335, 350);
+        ejey[3] = new Array(350, 335, 320, 305, 290, 275, 260, 245, 230, 215, 200);
+
+        function rotar() {
+           
+            for(i = 0;i<4;i++){
+                document.getElementById("imagen"+(i+1)).style.left = ejex[posiciones[i]][posicion];
+                document.getElementById("imagen"+(i+1)).style.top = ejey[posiciones[i]][posicion];
+            }
+
+            posicion++;
+            if (posicion == 11) {
+                clearInterval(objeto);
+                posicion = 0;
+                aux = posiciones[0]
+                for(j = 0; j < posiciones.length-1;j++){
+                    posiciones[j] = posiciones[j+1]
+                }
+                posiciones[posiciones.length-1] = aux
+            }
+        }
+
+    </script>
+</head>
+<body>
+    <img id="imagen1" src="imagenes/imagen1.jpg" width="150" height="150">
+    <img id="imagen2" src="imagenes/imagen2.jpg" width="150" height="150">
+    <img id="imagen3" src="imagenes/imagen3.png" width="150" height="150">
+    <img id="imagen4" src="imagenes/imagen4.jfif" width="150" height="150">
+
+    <button onclick="objeto=setInterval('rotar()', 500)">Desplazar</button>
+
+</body>
+</html>

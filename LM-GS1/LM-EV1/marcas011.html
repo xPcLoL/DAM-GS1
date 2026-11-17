@@ -1,0 +1,48 @@
+<html>
+    <head>
+        <title>Cambio de clase</title>
+        <style type ="text/css">
+            .bloque1{
+                position: absolute;
+                top: 50px;
+                left: 20px;
+                width: 300px;
+                background-color: aquamarine;
+            }
+             .bloque2{
+                position: absolute;
+                top: 50px;
+                left: 600px;
+                width: 400px;
+                background-color: brown;
+            }
+        </style>
+        <script language = "JavaScript">
+            function cambiar(){
+                if(j1.className=="bloque1"){
+                j1.className="bloque2"
+                j2.className="bloque1"
+                }else{
+                    j1.className = "bloque1"
+                    j2.className = "bloque2"
+                }
+                // ejecicio, solo me explica que puedo cambiar el nombre de las clases poniendo la id.classname
+            }
+        </script>
+    </head>
+    <body>
+        <div id = "j1" class="bloque1">
+        <img src="imagenes/kirk.webp" height="150" style="margin: 20px;">
+        <p align="justify" style="margin: 20px;">
+            Charles James Kirk ​​ fue un activista político conservador estadounidense.​​​​ Cofundó Turning Point USA, junto con William T. Montgomery, en 2012, y fue el director gerente de la organización
+        </p>
+        </div>
+        <div id="j2" class="bloque2">
+            <img src="imagenes/playero.jfif" height="150" style="margin: 20px;">
+            <p align="justify" style="margin: 20px;">
+               The Octane is one of the three bodies that can be unlocked at the beginning of the game. It has remained the most popular body in the game since Rocket League's release. 
+            </p>
+        </div>
+    </body>
+<input button="intercambiar">
+</html>
